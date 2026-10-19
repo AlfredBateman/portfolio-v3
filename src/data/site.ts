@@ -39,7 +39,7 @@ export const site = {
     { label: 'GitHub', href: 'https://github.com/AlfredBateman' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ishansharma1247' },
   ],
-  elsewhere: { label: 'Reject the null', href: 'https://alfredbateman.github.io/reject-the-null' },
+  elsewhere: { label: 'Reject the null', href: 'https://alfredbateman.github.io/reject-the-null/' },
 };
 
 export const projects: Project[] = [
