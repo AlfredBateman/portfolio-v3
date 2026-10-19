@@ -1,0 +1,55 @@
+---
+// A compass: a static dial and a needle the driver (src/motion/compass.ts) rotates.
+//   name   which needle state this is (needles with the same name share their angle across pages)
+//   reach  how far the pointer pulls it, in dial radii (0 = only hovered/focused [data-attract] targets)
+//   mini   the 8-tick header version
+interface Props { name: string; reach?: number; mini?: boolean; class?: string }
+const { name, reach = 0, mini = false, class: cls } = Astro.props;
+
+const R = 98;
+const ticks = Array.from({ length: mini ? 8 : 72 }, (_, i) => i * (mini ? 45 : 5));
+const tickLen = (d: number) => (mini ? (d % 90 === 0 ? 16 : 10) : d % 45 === 0 ? 13 : d % 15 === 0 ? 8 : 4);
+const at = (deg: number, r: number) => {
+  const a = ((deg - 90) * Math.PI) / 180;
+  return { x: +(r * Math.cos(a)).toFixed(2), y: +(r * Math.sin(a)).toFixed(2) };
+};
+const cardinals = [
+  { d: 0, t: 'N' },
+  { d: 90, t: 'E' },
+  { d: 180, t: 'S' },
+  { d: 270, t: 'W' },
+];
+const numbers = [30, 60, 120, 150, 210, 240, 300, 330];
+const w = mini ? 15 : 5.5; // needle half-width
+---
+<div class:list={['compass', { 'compass--mini': mini }, cls]} aria-hidden="true">
+  <svg class="dial" viewBox="-100 -100 200 200" focusable="false">
+    <circle class="dial__ring" r={R} />
+    {ticks.map((d) => (
+      <line
+        class:list={['dial__tick', { 'is-major': d % 45 === 0, 'is-ne': d === 45 }]}
+        x1="0" y1={-R} x2="0" y2={-R + tickLen(d)}
+        transform={`rotate(${d})`}
+      />
+    ))}
+    {!mini && cardinals.map(({ d, t }) => {
+      const p = at(d, 74);
+      return <text class="dial__label" x={p.x} y={p.y}>{t}</text>;
+    })}
+    {!mini && numbers.map((d) => {
+      const p = at(d, 80);
+      return <text class="dial__num" x={p.x} y={p.y}>{d}</text>;
+    })}
+    {!mini && (() => {
+      const p = at(45, 117); // outside the ring: the needle points at the word
+      return <text class="dial__ne" x={p.x} y={p.y} lang="hi">ईशान</text>;
+    })()}
+  </svg>
+  <div class="needle" data-needle={name} data-reach={reach}>
+    <svg viewBox="-100 -100 200 200" focusable="false">
+      <polygon class="needle__n" points={`0,${mini ? -78 : -86} ${w},0 ${-w},0`} />
+      <polygon class="needle__s" points={`0,${mini ? 78 : 86} ${w},0 ${-w},0`} />
+      <circle class="needle__pin" r={mini ? 9 : 3.5} />
+    </svg>
+  </div>
+</div>

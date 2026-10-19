@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import Waypoint from '../components/Waypoint.astro';
+import { about, href, site } from '../data/site';
+const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
+---
+<Base
+  title="About"
+  description="About Ishan Sharma: final-year Computer Science Engineering student at Chitkara University. Education, toolbox, certifications, and the role Ishan is looking for."
+  current="about"
+>
+  <section class="about-hero" aria-labelledby="about-title">
+    <h1 id="about-title" class="rise-block">
+      I’m Ishan Sharma. I’m&nbsp;finishing a computer science degree and looking for a backend or full-stack&nbsp;role.
+    </h1>
+    <dl class="about-hero__meta" data-reveal="fade" data-intro data-delay="0.6">
+      <div><dt>Heading</dt><dd><span class="tnum" data-bearing="header">045.0°</span> <span data-bearing="header" data-format="point">NE</span></dd></div>
+      <div><dt>Graduating</dt><dd>{about.education.when}</dd></div>
+      <div><dt>Reach me</dt><dd><a class="link" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+    </dl>
+  </section>
+
+  <div class="rows">
+    <section class="arow" aria-labelledby="edu-title" data-waypoint data-reveal>
+      <Waypoint id="edu" label="Education" />
+      <div class="arow__body" data-aim>
+        <p class="arow__lead">{about.education.school}</p>
+        <p class="arow__muted">{about.education.degree}. {about.education.place}. {about.education.when}.</p>
+        <h3 class="arow__sub">Core concepts</h3>
+        <ul class="ruled ruled--2">
+          {about.education.core.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="arow" aria-labelledby="tools-title" data-waypoint data-reveal>
+      <Waypoint id="tools" label="Toolbox" />
+      <div class="arow__body arow__groups" data-aim>
+        {about.toolbox.map((g) => (
+          <div>
+            <h3 class="arow__sub">{g.group}</h3>
+            <ul class="ruled ruled--sm">{g.items.map((i) => <li>{i}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="arow" aria-labelledby="certs-title" data-waypoint data-reveal>
+      <Waypoint id="certs" label="Certifications" />
+      <div class="arow__body" data-aim>
+        <ul class="ruled ruled--2">
+          {about.certifications.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="arow" aria-labelledby="look-title" data-waypoint data-reveal>
+      <Waypoint id="look" label="What I’m looking for" />
+      <div class="arow__body" data-aim>
+        <p class="arow__lead">{about.lookingFor}</p>
+        <div class="arow__actions">
+          <a class="cta flood" href={`mailto:${site.email}`} data-attract="Email">Email me <Arrow /></a>
+          <a class="cta cta--quiet flood" href={href(site.resume)} download data-attract="Résumé">Download résumé (PDF) <Arrow down /></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="arow" aria-labelledby="elsewhere-title" data-waypoint data-reveal>
+      <Waypoint id="elsewhere" label="Elsewhere" />
+      <div class="arow__body" data-aim>
+        <ul class="ruled ruled--links">
+          {[...site.socials, site.elsewhere].map((s) => (
+            <li><a class="link" href={s.href} rel="me noopener" target="_blank">{s.label}</a> <span class="arow__muted">{bare(s.href)}</span></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="arow" aria-labelledby="colophon-title" data-waypoint data-reveal>
+      <Waypoint id="colophon" label="Colophon" />
+      <div class="arow__body" data-aim>
+        <p>
+          Set in Archivo, stretched wide for display and kept at normal width for reading, with Anek Devanagari
+          for the name on the dial. Built with Astro, GSAP and Lenis, hosted on GitHub Pages. No trackers, no
+          cookies. The compass needle is a damped spring, and it always finds its way back to 045°.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>

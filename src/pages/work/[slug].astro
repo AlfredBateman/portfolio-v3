@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import Arrow from '../../components/Arrow.astro';
+import ProjectFigure from '../../components/ProjectFigure.astro';
+import Waypoint from '../../components/Waypoint.astro';
+import { href, projects, site, type Project } from '../../data/site';
+import { emWidth } from '../../data/fit';
+
+export function getStaticPaths() {
+  return projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+const { project: p, next } = Astro.props as { project: Project; next: Project };
+const bare = (u: string) => u.replace(/^https?:\/\//, '');
+const meta = [
+  { k: 'Type', v: p.kind },
+  { k: 'My part', v: p.role },
+  { k: 'Stack', v: p.stack.join(', ') },
+  { k: 'Status', v: p.status },
+];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: p.title,
+  description: p.summary,
+  codeRepository: p.repo,
+  programmingLanguage: p.stack,
+  author: { '@type': 'Person', name: site.name, url: site.url },
+};
+---
+<Base title={p.title} description={`${p.title}: ${p.summary}`.length <= 160 ? `${p.title}: ${p.summary}` : p.summary} current="work">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <article class="case">
+    <header class="case__hero">
+      <div class="case__side">
+        <dl class="case__meta" data-reveal="fade" data-intro data-delay="0.5">
+          {meta.map((m) => (
+            <div><dt>{m.k}</dt><dd>{m.v}</dd></div>
+          ))}
+          <div class="case__links">
+            <dt>Links</dt>
+            <dd>
+              <a class="link" href={p.repo} rel="noopener" target="_blank">Source on GitHub</a>
+              {p.live && <a class="link" href={p.live} rel="noopener" target="_blank">Live: {bare(p.live)}</a>}
+            </dd>
+          </div>
+        </dl>
+        <p class="case__summary" data-split="lines" data-intro data-delay="0.3">{p.summary}</p>
+      </div>
+      <div class="case__figure"><ProjectFigure slug={p.slug} /></div>
+      <h1 class="case__title rise" style={`--em:${emWidth(p.title)}`}><span><span>{p.title}</span></span></h1>
+    </header>
+
+    <section class="figure" aria-labelledby="how-title">
+      <h2 class="label" id="how-title">How it works</h2>
+      <ol class="pipeline">
+        {p.pipeline.map((s, i) => (
+          <li class="pipeline__step" style={`--i:${i}`} data-reveal data-delay={String(i * 0.09)}>
+            <span class="pipeline__label">{s.label}</span>
+            <span class="pipeline__note">{s.note}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="pair" aria-labelledby="problem-title" data-waypoint>
+      <Waypoint id="problem" label="The problem" />
+      <p class="pair__text" data-split="lines" data-aim>{p.context}</p>
+    </section>
+    <section class="pair" aria-labelledby="idea-title" data-waypoint>
+      <Waypoint id="idea" label="The idea" />
+      <p class="pair__text" data-split="lines" data-aim>{p.idea}</p>
+    </section>
+
+    <section class="numbers" aria-labelledby="numbers-title">
+      <h2 class="label" id="numbers-title">In numbers</h2>
+      <dl class="numbers__list">
+        {p.details.map((d) => (
+          <div class="numbers__row" data-reveal>
+            <dt><span class="numbers__stat">{d.stat}</span><span class="numbers__label">{d.label}</span></dt>
+            <dd>{d.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="outcome" aria-labelledby="outcome-title" data-waypoint>
+      <Waypoint id="outcome" label="Where it ended up" />
+      <div class="outcome__body" data-aim>
+        <p class="outcome__text" data-split="lines">{p.outcome}</p>
+        <p class="outcome__links">
+          <a class="link" href={p.repo} rel="noopener" target="_blank">Read the source on GitHub</a>
+          {p.live && <a class="link" href={p.live} rel="noopener" target="_blank">Open the live app</a>}
+        </p>
+      </div>
+    </section>
+
+    <nav class="next" aria-label="Next project">
+      <a class="next__link flood" href={href(`work/${next.slug}/`)} data-attract={next.title} data-dest={next.title}>
+        <span class="next__kicker">Next project</span>
+        <span class="next__title" style={`--em:${emWidth(next.title)}`}>{next.title}</span>
+        <Arrow />
+      </a>
+    </nav>
+  </article>
+</Base>

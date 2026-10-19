@@ -1,0 +1,6 @@
+---
+// The site's one arrow. NE by default (it travels along the heading); `down` for downloads.
+interface Props { down?: boolean }
+const { down = false } = Astro.props;
+---
+<span class:list={['arrow', { 'arrow--down': down }]} aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">{down ? <path d="M12 3v15M5 11l7 7 7-7M4 21h16" /> : <path d="M5 19 19 5M8 5h11v11" />}</svg></span>

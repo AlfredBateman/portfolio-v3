@@ -1,0 +1,14 @@
+---
+// A section's label with its own compass. The needle turns toward the section's [data-aim] text while it is
+// on screen, and the bearing beside it is live. Put data-waypoint on the section.
+import Compass from './Compass.astro';
+interface Props { id: string; label: string }
+const { id, label } = Astro.props;
+---
+<div class="waypoint">
+  <div class="waypoint__dial">
+    <Compass name={`wp-${id}`} mini />
+    <span class="waypoint__deg" data-bearing={`wp-${id}`} data-format="int" aria-hidden="true">045°</span>
+  </div>
+  <h2 class="label" id={`${id}-title`}>{label}</h2>
+</div>

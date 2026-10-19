@@ -1,0 +1,26 @@
+---
+import { href, site } from '../data/site';
+import Arrow from './Arrow.astro';
+---
+<footer class="footer" id="contact">
+  <div class="footer__top">
+    <h2 class="footer__title" data-split="lines">Point me somewhere.</h2>
+    <p class="footer__lede">
+      Graduate roles, internships, or a problem you think I would enjoy. Email reaches me fastest.
+    </p>
+  </div>
+  <a class="footer__mail flood" href={`mailto:${site.email}`} style={`--chars:${site.email.length}`} data-attract="Email">
+    <span class="footer__address">{site.email}</span>
+    <Arrow />
+  </a>
+  <div class="footer__bottom">
+    <ul class="footer__links">
+      {site.socials.map((s) => (
+        <li><a class="utility" href={s.href} rel="me noopener" target="_blank">{s.label}</a></li>
+      ))}
+      <li><a class="utility" href={href(site.resume)} download>Résumé (PDF)</a></li>
+    </ul>
+    <p>Open to software engineering roles</p>
+    <p>© 2026 {site.name}. Set in Archivo and Anek Devanagari.</p>
+  </div>
+</footer>

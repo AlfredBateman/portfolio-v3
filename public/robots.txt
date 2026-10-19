@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alfredbateman.github.io/portfolio-v3/sitemap-index.xml

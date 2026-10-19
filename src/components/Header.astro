@@ -1,0 +1,33 @@
+---
+import Compass from './Compass.astro';
+import { href, site } from '../data/site';
+interface Props { current?: 'home' | 'work' | 'about'; lost?: boolean }
+const { current, lost = false } = Astro.props;
+const onHome = Astro.url.pathname === href();
+const links = [
+  { label: 'Work', href: onHome ? '#work' : `${href()}#work`, current: current === 'work' ? ('true' as const) : undefined },
+  { label: 'About', href: href('about/'), current: current === 'about' ? ('page' as const) : undefined },
+  { label: 'Contact', href: '#contact', current: undefined },
+];
+---
+<header class="header">
+  <a class="brand" href={href()} data-dest={site.short} aria-label={`${site.name}, home`}>
+    <Compass name="header" mini reach={2.5} />
+    <span class="brand__name">{site.short}</span>
+  </a>
+  <p class="readout" aria-hidden="true">
+    <span data-bearing="header">{lost ? '---.-°' : '045.0°'}</span>
+    <span class="readout__label" data-bearing-label="header">{lost ? 'lost' : 'NE'}</span>
+  </p>
+  <nav class="nav" aria-label="Main">
+    <ul>
+      {links.map((l) => (
+        <li>
+          <a class="nav__link" href={l.href} aria-current={l.current} data-dest={l.label} data-attract={l.label}>
+            <span class="roll" data-label={l.label}><span>{l.label}</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>

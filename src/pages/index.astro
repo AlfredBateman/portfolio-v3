@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import Compass from '../components/Compass.astro';
+import Arrow from '../components/Arrow.astro';
+import { href, projects, site } from '../data/site';
+import { emWidth } from '../data/fit';
+---
+<Base current="home" loader>
+  <section class="hero" aria-labelledby="hero-title">
+    <p class="hero__intro rise-block">
+      Final-year computer science student. I build backends and full-stack apps, and I write the tests:
+      over a thousand across four shipped projects. Looking for my first role as a software engineer.
+    </p>
+    <div class="hero__compass">
+      <Compass name="hero" reach={2.4} />
+    </div>
+    <h1 class="hero__name rise" id="hero-title" aria-label={site.name} style={`--em:${emWidth(site.short)}`}><span><span>{site.short}</span></span></h1>
+    <div class="hero__foot">
+      <p data-reveal="fade" data-intro data-delay="0.8">{site.name}. B.E. Computer Science Engineering, Chitkara University, 2027</p>
+      <div class="hero__actions" data-reveal="fade" data-intro data-delay="0.9">
+        <a class="cta cta--quiet flood" href={href(site.resume)} download data-attract="Résumé">
+          Résumé (PDF) <Arrow down />
+        </a>
+        <a class="cta flood" href="#work" data-attract="Work">
+          See the work <Arrow />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="work" id="work" aria-labelledby="work-title">
+    <div class="work__head">
+      <h2 id="work-title" data-split="chars">Work</h2>
+      <p data-reveal="fade">
+        Four projects, each with its repository and its tests. Two of them are live; open any one to see how it works.
+      </p>
+    </div>
+    <ol class="index">
+      {projects.map((p) => (
+        <li>
+          <a class="row flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>
+            <span class="row__title" style={`--em:${emWidth(p.title)}`}>{p.title}</span>
+            <span class="row__summary">{p.summary}</span>
+            <span class="row__kind">{p.kind}</span>
+            <span class="row__year">{p.status}</span>
+            <Arrow />
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="facts" aria-labelledby="facts-title">
+    <h2 class="facts__title" id="facts-title">So far</h2>
+    <dl class="facts__list">
+      <div data-reveal data-delay="0">
+        <dt>Full-stack projects, built and deployed</dt>
+        <dd>4</dd>
+      </div>
+      <div data-reveal data-delay="0.08">
+        <dt>Automated tests across them</dt>
+        <dd>1,000+</dd>
+      </div>
+      <div data-reveal data-delay="0.16">
+        <dt>Internships. This site is part of fixing that</dt>
+        <dd>0</dd>
+      </div>
+    </dl>
+  </section>
+</Base>

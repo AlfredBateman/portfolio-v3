@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Compass from '../components/Compass.astro';
+import Arrow from '../components/Arrow.astro';
+import { href } from '../data/site';
+---
+<Base title="Off the map" description="This page does not exist. The compass on it has nothing to point at, but the way back to the start still works." lost>
+  <section class="lost" data-compass="lost" aria-labelledby="lost-title">
+    <div class="lost__compass"><Compass name="lost" /></div>
+    <div class="lost__text">
+      <h1 id="lost-title" data-split="chars" data-intro>Off the map</h1>
+      <p>
+        Nothing lives at this address, so the compass has nothing to point at. Give it the way home and it
+        will find it.
+      </p>
+      <a class="cta flood" href={href()} data-attract="Home" data-dest="Ishan" data-reveal="fade" data-intro data-delay="0.5">
+        Back to the start <Arrow />
+      </a>
+    </div>
+  </section>
+</Base>
