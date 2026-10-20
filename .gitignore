@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # QA screenshots (awwwards shoot/audit)
 .shots/
+
+# jury evidence and score cards
+.jury/

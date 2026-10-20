@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Arrow from '../../components/Arrow.astro';
 import ProjectFigure from '../../components/ProjectFigure.astro';
@@ -67,11 +68,11 @@ const jsonLd = {
     </section>
 
     <section class="pair" aria-labelledby="problem-title" data-waypoint>
-      <Waypoint id="problem" label="The problem" />
+      <Waypoint id="problem" label="The problem" deg={135} />
       <p class="pair__text" data-split="lines" data-aim>{p.context}</p>
     </section>
     <section class="pair" aria-labelledby="idea-title" data-waypoint>
-      <Waypoint id="idea" label="The idea" />
+      <Waypoint id="idea" label="The idea" deg={90} />
       <p class="pair__text" data-split="lines" data-aim>{p.idea}</p>
     </section>
 
@@ -88,13 +89,19 @@ const jsonLd = {
     </section>
 
     <section class="outcome" aria-labelledby="outcome-title" data-waypoint>
-      <Waypoint id="outcome" label="Where it ended up" />
+      <Waypoint id="outcome" label="Where it ended up" deg={45} />
       <div class="outcome__body" data-aim>
         <p class="outcome__text" data-split="lines">{p.outcome}</p>
         <p class="outcome__links">
           <a class="link" href={p.repo} rel="noopener" target="_blank">Read the source on GitHub</a>
           {p.live && <a class="link" href={p.live} rel="noopener" target="_blank">Open the live app</a>}
         </p>
+        {p.shots?.map((s) => (
+          <figure class="shot" data-reveal>
+            <Image src={s.src} alt={s.alt} widths={[720, 1440]} sizes="(max-width: 767px) 100vw, 58vw" />
+            <figcaption>{s.caption}</figcaption>
+          </figure>
+        ))}
       </div>
     </section>
 

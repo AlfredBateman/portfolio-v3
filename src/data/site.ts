@@ -1,8 +1,12 @@
 // All visible content lives here. Every fact comes from Ishan's résumé (public/ishan-sharma-resume.pdf).
-// The project figures are labelled illustrations of how each system works, not screenshots.
+// The project figures are labelled illustrations of how each system works; real screenshots go in `shots`.
+import type { ImageMetadata } from 'astro';
+import apCompare from '../assets/agentprobe/compare.png';
+import apOverview from '../assets/agentprobe/overview.png';
 
 export type Step = { label: string; note: string };
 export type Detail = { stat: string; label: string; text: string };
+export type Shot = { src: ImageMetadata; alt: string; caption: string };
 
 export type Project = {
   slug: string;
@@ -19,6 +23,7 @@ export type Project = {
   outcome: string;
   repo: string;
   live?: string;
+  shots?: Shot[]; // screenshots of the shipped product, shown under "Where it ended up"
 };
 
 // Every internal URL goes through here: the site is served from /portfolio-v3/ on GitHub Pages.
@@ -39,7 +44,6 @@ export const site = {
     { label: 'GitHub', href: 'https://github.com/AlfredBateman' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ishansharma1247' },
   ],
-  elsewhere: { label: 'Reject the null', href: 'https://alfredbateman.github.io/reject-the-null/' },
 };
 
 export const projects: Project[] = [
@@ -83,6 +87,18 @@ export const projects: Project[] = [
       'A FastAPI and PostgreSQL backend with JWT authentication, a Next.js dashboard, a CLI, an SSRF guard, and a GitHub Actions integration that comments on pull requests. CI/CD deploys it to Vercel, Render and Neon.',
     repo: 'https://github.com/AlfredBateman/AgentProbe',
     live: 'https://agent-probe-umber.vercel.app',
+    shots: [
+      {
+        src: apCompare,
+        alt: 'AgentProbe comparing two runs of the smoke suite. The verdict reads Regression: one case, refund-outside-window, went from 10 of 10 passes to 0 of 10, p = 5.4e-6.',
+        caption: 'The dashboard comparing two runs of the demo suite. One case dropped from 10/10 to 0/10, and it is the only one flagged.',
+      },
+      {
+        src: apOverview,
+        alt: 'AgentProbe overview for the smoke suite: latest pass rate 44.4% with a 95% confidence interval of 11.1% to 77.8%, charted against the main baseline of 98.9%.',
+        caption: 'The overview: pass rate per run with its 95% confidence interval, against the main baseline.',
+      },
+    ],
   },
   {
     slug: 'stockpilot',

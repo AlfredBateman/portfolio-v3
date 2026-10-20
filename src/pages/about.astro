@@ -23,7 +23,7 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
 
   <div class="rows">
     <section class="arow" aria-labelledby="edu-title" data-waypoint data-reveal>
-      <Waypoint id="edu" label="Education" />
+      <Waypoint id="edu" label="Education" deg={270} />
       <div class="arow__body" data-aim>
         <p class="arow__lead">{about.education.school}</p>
         <p class="arow__muted">{about.education.degree}. {about.education.place}. {about.education.when}.</p>
@@ -35,7 +35,7 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
     </section>
 
     <section class="arow" aria-labelledby="tools-title" data-waypoint data-reveal>
-      <Waypoint id="tools" label="Toolbox" />
+      <Waypoint id="tools" label="Toolbox" deg={225} />
       <div class="arow__body arow__groups" data-aim>
         {about.toolbox.map((g) => (
           <div>
@@ -47,7 +47,7 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
     </section>
 
     <section class="arow" aria-labelledby="certs-title" data-waypoint data-reveal>
-      <Waypoint id="certs" label="Certifications" />
+      <Waypoint id="certs" label="Certifications" deg={180} />
       <div class="arow__body" data-aim>
         <ul class="ruled ruled--2">
           {about.certifications.map((c) => <li>{c}</li>)}
@@ -56,7 +56,7 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
     </section>
 
     <section class="arow" aria-labelledby="look-title" data-waypoint data-reveal>
-      <Waypoint id="look" label="What I’m looking for" />
+      <Waypoint id="look" label="What I’m looking for" deg={135} />
       <div class="arow__body" data-aim>
         <p class="arow__lead">{about.lookingFor}</p>
         <div class="arow__actions">
@@ -67,10 +67,10 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
     </section>
 
     <section class="arow" aria-labelledby="elsewhere-title" data-waypoint data-reveal>
-      <Waypoint id="elsewhere" label="Elsewhere" />
+      <Waypoint id="elsewhere" label="Elsewhere" deg={90} />
       <div class="arow__body" data-aim>
         <ul class="ruled ruled--links">
-          {[...site.socials, site.elsewhere].map((s) => (
+          {site.socials.map((s) => (
             <li><a class="link" href={s.href} rel="me noopener" target="_blank">{s.label}</a> <span class="arow__muted">{bare(s.href)}</span></li>
           ))}
         </ul>
@@ -78,7 +78,7 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
     </section>
 
     <section class="arow" aria-labelledby="colophon-title" data-waypoint data-reveal>
-      <Waypoint id="colophon" label="Colophon" />
+      <Waypoint id="colophon" label="Colophon" deg={45} />
       <div class="arow__body" data-aim>
         <p>
           Set in Archivo, stretched wide for display and kept at normal width for reading, with Anek Devanagari

@@ -30,7 +30,7 @@ const jsonLd = {
   email: `mailto:${site.email}`,
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Chitkara University' },
   knowsAbout: ['Python', 'FastAPI', 'TypeScript', 'React', 'Next.js', 'Node.js', 'PostgreSQL', 'Testing', 'CI/CD'],
-  sameAs: [...site.socials.map((s) => s.href), site.elsewhere.href],
+  sameAs: site.socials.map((s) => s.href),
 };
 ---
 <!doctype html>

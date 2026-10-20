@@ -14,7 +14,7 @@ import { emWidth } from '../data/fit';
     <div class="hero__compass">
       <Compass name="hero" reach={2.4} />
     </div>
-    <h1 class="hero__name rise" id="hero-title" aria-label={site.name} style={`--em:${emWidth(site.short)}`}><span><span>{site.short}</span></span></h1>
+    <h1 class="hero__name rise" id="hero-title" style={`--em:${emWidth(site.short)}`}><span aria-hidden="true"><span>{site.short}</span></span><span class="sr-only">{site.name}, software engineer</span></h1>
     <div class="hero__foot">
       <p data-reveal="fade" data-intro data-delay="0.8">{site.name}. B.E. Computer Science Engineering, Chitkara University, 2027</p>
       <div class="hero__actions" data-reveal="fade" data-intro data-delay="0.9">

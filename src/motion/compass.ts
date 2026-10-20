@@ -80,9 +80,7 @@ function tick(time: number, deltaMs: number) {
     n.el.style.rotate = `${n.s.angle.toFixed(2)}deg`;
   }
   for (const r of readouts) {
-    const value = r.format === 'point' ? compassPoint(r.s.angle)
-      : r.format === 'int' ? `${String(Math.round(norm(r.s.angle)) % 360).padStart(3, '0')}°`
-      : formatBearing(r.s.angle);
+    const value = r.format === 'point' ? compassPoint(r.s.angle) : formatBearing(r.s.angle);
     if (r.value.textContent !== value) r.value.textContent = value;
     if (!r.label) continue;
     const label = attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(r.s.angle));

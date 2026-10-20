@@ -54,17 +54,17 @@ const captions: Record<string, string> = {
   <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={captions[slug]} focusable="false">
     {slug === 'agentprobe' && (
       <g>
-        <text class="pfig__text pfig__muted" x="200" y="24" text-anchor="middle">baseline</text>
-        <text class="pfig__text pfig__muted" x="420" y="24" text-anchor="middle">candidate</text>
+        <text class="pfig__text pfig__muted" x="182" y="24" text-anchor="middle">baseline</text>
+        <text class="pfig__text pfig__muted" x="382" y="24" text-anchor="middle">candidate</text>
         {cases.map((c, i) => {
           const y = 70 + i * 52;
           const bad = c.verdict === 'regression';
           return (
             <g>
               <text class="pfig__text" x="0" y={y + 6}>case {i + 1}</text>
-              {c.base.map((ok, j) => <circle class:list={['pfig__run', { 'is-fail': !ok }]} cx={110 + j * 20} cy={y} r="6" data-run={j} />)}
-              {c.cand.map((ok, j) => <circle class:list={['pfig__run', { 'is-fail': !ok, 'is-bad': bad }]} cx={330 + j * 20} cy={y} r="6" data-run={j} />)}
-              <text class:list={['pfig__text', bad ? 'pfig__strong pfig__alert' : 'pfig__muted']} x="534" y={y + 6} data-verdict>{c.verdict}</text>
+              {c.base.map((ok, j) => <circle class:list={['pfig__run', { 'is-fail': !ok }]} cx={96 + j * 19} cy={y} r="6" data-run={j} />)}
+              {c.cand.map((ok, j) => <circle class:list={['pfig__run', { 'is-fail': !ok, 'is-bad': bad }]} cx={296 + j * 19} cy={y} r="6" data-run={j} />)}
+              <text class:list={['pfig__text', bad ? 'pfig__strong pfig__alert' : 'pfig__muted']} x={W} y={y + 6} text-anchor="end" data-verdict>{c.verdict}</text>
             </g>
           );
         })}
