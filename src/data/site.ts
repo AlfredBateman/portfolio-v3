@@ -105,7 +105,7 @@ export const projects: Project[] = [
     title: 'StockPilot',
     summary: 'A screener for about 100 NIFTY stocks that understands plain English, and keeps working when the network does not.',
     kind: 'Team project, full-stack',
-    role: 'Team lead, team of two',
+    role: 'Team lead, team of three',
     stack: ['React', 'Node.js', 'Express', 'TypeScript', 'MongoDB Atlas', 'Render', 'GitHub Actions'],
     status: 'v1.2.0, live on Render',
     pipeline: [
