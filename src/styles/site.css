@@ -760,7 +760,9 @@ g.is-hot > .pfig__strong { fill: #fff; }
   letter-spacing: -0.05em;
   line-height: 0.9;
   margin-left: -0.04em;
+  color: var(--c-quiet); /* the sentence recedes, its keywords stay in ink */
 }
+.about-hero h1 strong { color: var(--c-fg); font-weight: inherit; }
 .about-hero__meta {
   grid-column: 5 / -1;
   grid-row: 2;

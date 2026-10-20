@@ -24,6 +24,7 @@
   --c-bg: #edeeea;      /* chart */
   --c-fg: #121315;      /* graphite */
   --c-muted: #4f535a;
+  --c-quiet: #868985;   /* large display text only: 3.04:1 on --c-bg, the floor for large text */
   --c-line: rgb(18 19 21 / 0.14);
   --c-accent: #c4221a;  /* needle red: needle north, the NE mark, focus */
   --c-curtain: var(--c-fg);
