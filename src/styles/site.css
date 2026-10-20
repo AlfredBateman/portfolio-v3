@@ -107,6 +107,12 @@ a:focus-visible > .roll::after { translate: 0 0; }
 @media (hover: hover) { .utility:hover { background-size: 100% 1px; } }
 .utility:focus-visible { background-size: 100% 1px; }
 
+/* Touch: grow the hit area of text links to about 44px without moving their underline. */
+@media (pointer: coarse) {
+  .link, .utility { position: relative; }
+  .link::after, .utility::after { content: ''; position: absolute; inset: -0.45rem -0.25rem; }
+}
+
 /* Buttons */
 .cta {
   display: inline-flex;
@@ -204,6 +210,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 
 @media (max-width: 767px) {
   .readout__label { display: none; }
+  @media (max-width: 374px) { .readout { display: none; } } /* small Androids: the nav needs the room */
   .readout { margin-left: -0.4rem; }
   .brand .compass { width: 2rem; }
   .nav ul { gap: 1.1rem; }
@@ -305,12 +312,13 @@ html.is-scrolled .header { border-color: var(--c-line); }
     grid-template-rows: auto auto auto auto;
     align-content: space-between;
   }
-  .hero__compass { grid-column: 1; grid-row: 1; width: min(72vw, 40svh); margin-top: calc(var(--u) * 2); }
-  .hero__intro { grid-column: 1; grid-row: 2; padding: calc(var(--u) * 4) 0 calc(var(--u) * 3); font-size: 1.1875rem; }
+  /* Sized so the name and both CTAs fit the first screen of a phone with its browser bars showing. */
+  .hero__compass { grid-column: 1; grid-row: 1; width: min(56vw, 30svh); margin-top: var(--u); }
+  .hero__intro { grid-column: 1; grid-row: 2; padding: calc(var(--u) * 2.5) 0 calc(var(--u) * 2); font-size: 1.1875rem; }
   .hero__name { grid-column: 1; grid-row: 3; }
   .hero__foot { grid-column: 1; grid-row: 4; flex-direction: column; align-items: stretch; gap: 1rem; }
-  .hero__actions { flex-direction: column; align-items: stretch; }
-  .hero__foot .cta { justify-content: space-between; }
+  .hero__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); order: -1; } /* buttons before the degree line */
+  .hero__foot .cta { justify-content: space-between; padding-inline: 1rem; white-space: normal; }
 }
 
 .hero__actions { display: flex; gap: 0.75rem; }
@@ -543,6 +551,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .pfig svg { width: auto; max-width: 100%; max-height: 42svh; overflow: visible; }
 .shot { margin-top: calc(var(--u) * 2); }
 .shot img { width: 100%; border: 1px solid var(--c-fg); }
+.shot a { display: block; cursor: zoom-in; }
 .pfig figcaption, .shot figcaption { max-width: 44ch; margin-top: 0.9rem; font-size: var(--t-xs); color: var(--c-muted); }
 .pfig__line { fill: none; stroke: var(--c-fg); stroke-width: 1.5; }
 .pfig__run { fill: var(--c-fg); stroke: var(--c-fg); stroke-width: 2; }
@@ -801,7 +810,8 @@ g.is-hot > .pfig__strong { fill: #fff; }
 
 @media (max-width: 767px) {
   .about-hero { min-height: 80svh; }
-  .about-hero h1 { grid-column: 1 / -1; font-size: 2.6rem; }
+  .about-hero h1 { grid-column: 1 / -1; font-size: 2.125rem; }
+  .ruled:not(.ruled--sm) li { font-size: 1.125rem; }
   .about-hero__meta { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
   .arow { padding-block: calc(var(--u) * 4) calc(var(--u) * 5); }
   .arow__body { grid-column: 1 / -1; }

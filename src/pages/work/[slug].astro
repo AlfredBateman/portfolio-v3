@@ -98,7 +98,9 @@ const jsonLd = {
         </p>
         {p.shots?.map((s) => (
           <figure class="shot" data-reveal>
-            <Image src={s.src} alt={s.alt} widths={[720, 1440]} sizes="(max-width: 767px) 100vw, 58vw" />
+            <a href={s.src.src} data-astro-reload>
+              <Image src={s.src} alt={s.alt} widths={[720, 1440]} sizes="(max-width: 767px) 100vw, 58vw" />
+            </a>
             <figcaption>{s.caption}</figcaption>
           </figure>
         ))}
