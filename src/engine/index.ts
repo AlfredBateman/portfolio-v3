@@ -62,6 +62,7 @@ function initPage() {
 export async function boot(setup?: () => void) {
   if (booted) return;
   booted = true;
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => location.reload());
   syncFlags();
   initScroll();
   setup?.();

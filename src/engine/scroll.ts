@@ -16,7 +16,10 @@ const state: ScrollState = { y: 0, velocity: 0, progress: 0 };
 export function initScroll() {
   if (lenis || prefersReducedMotion()) {
     // Still publish native scroll position for WebGL sync.
-    if (!lenis) addEventListener('scroll', nativeTick, { passive: true });
+    if (!lenis) {
+      addEventListener('scroll', nativeTick, { passive: true });
+      ScrollTrigger.disable(); // no triggers exist under reduced motion; this stops its keep-alive rAF loop
+    }
     return;
   }
   lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, touchMultiplier: 1.2, anchors: true });
