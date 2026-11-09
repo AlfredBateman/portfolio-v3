@@ -1,6 +1,6 @@
 // Global motion: runs once on the client, before the first page initializes.
 import { gsap } from 'gsap';
-import { ease, neOffset, onScroll, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
+import { ease, neOffset, onPage, onScroll, prefersReducedMotion, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
 import { heading, kick, startCompass } from './compass';
 import { startFigures } from './figures';
 import { startTrueNE } from './true-ne';
@@ -76,6 +76,14 @@ export function setupMotion() {
         .set(c, { autoAlpha: 0 });
     },
   });
+
+  // Case title: widens toward the east, scrubbed to the scroll as the case hero leaves.
+  if (!prefersReducedMotion()) {
+    onPage(() => {
+      const title = document.querySelector('.case__title');
+      if (title) gsap.to(title, { fontStretch: '125%', ease: 'none', scrollTrigger: { trigger: '.case__hero', start: 'top top', end: 'bottom top', scrub: true } });
+    });
+  }
 
   // Header hairline once the page moves.
   onScroll(({ y }) => document.documentElement.classList.toggle('is-scrolled', y > 8));
