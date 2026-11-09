@@ -39,7 +39,7 @@ const transcript = [
 const checks = ['Schema valid', 'Quote found verbatim', 'Approved by a person'];
 
 // CanvasLint: forty recorded frames, calls per frame as bars, lint warnings marked.
-const frames = Array.from({ length: 40 }, (_, i) => Math.round(38 + 28 * Math.sin(i * 0.7) + 18 * Math.sin(i * 2.3 + 1) + (i % 9 === 4 ? 40 : 0)));
+const frames = Array.from({ length: 40 }, (_, i) => Math.max(0, Math.round(38 + 28 * Math.sin(i * 0.7) + 18 * Math.sin(i * 2.3 + 1) + (i % 9 === 4 ? 40 : 0))));
 const flagged = new Set([4, 13, 22, 31]);
 const log = ['save()', 'translate(120, 80)', 'rotate(0.42)', 'fillRect(0, 0, 40, 40)', 'restore()'];
 
