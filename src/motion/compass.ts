@@ -7,6 +7,8 @@
 //   3. the pointer, if it is within the needle's reach (data-reach, in dial radii), else
 //   4. its resting bearing: a waypoint needle holds its section's bearing; the header needle takes the bearing of the
 //      waypoint section in view (the readout names its compass point); anything else rests on 045°.
+// Arrival: once the contact footer is well into view the needles lock on exactly 045°, the sway and the jolts stop and
+// the readout says "locked"; the dead-still needle after a living one is the moment of arrival. Not on the 404.
 // Changes in scroll speed jolt it, like carrying a real compass: starting, stopping or flicking the page makes the needle
 // lag and swing, steady scrolling leaves it on its bearing. Page transitions kick it too; a slow two-sine sway keeps it
 // alive at rest.
@@ -14,7 +16,7 @@
 // Reduced motion: none of this runs; CSS holds every needle at 045° (or 200° on the 404).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { isTouch, onPage, onScroll, prefersReducedMotion, scrollState } from '../engine';
+import { ease, isTouch, onPage, onScroll, prefersReducedMotion, scrollState } from '../engine';
 
 const HOME = 45;
 const K = 70; // stiffness
@@ -36,6 +38,7 @@ let lost = false;
 let pointer: { x: number; y: number } | null = null;
 let attract: HTMLElement | null = null;
 let section: { el: HTMLElement; deg: number } | null = null; // the waypoint section in view
+let locked = false; // arrived at the contact footer
 let scrollY0 = 0;
 let scrollV = 0; // smoothed scroll speed, px/s
 
@@ -67,7 +70,7 @@ function tick(time: number, deltaMs: number) {
   scrollY0 = y;
   const dv = (v - scrollV) * Math.min(1, dt * JOLT_SMOOTH);
   scrollV += dv;
-  const jolt = dv * JOLT;
+  const jolt = locked ? 0 : dv * JOLT;
   for (const n of needles) {
     const r = n.el.getBoundingClientRect();
     if (r.bottom < 0 || r.top > innerHeight || !r.width) continue; // off screen: rests where it is
@@ -77,6 +80,7 @@ function tick(time: number, deltaMs: number) {
     let target = rest;
     let sway = true;
     if (held) { target = 0; sway = false; }
+    else if (locked) { target = HOME; sway = false; }
     else if (a) target = bearing(a.left + a.width / 2 - cx, a.top + a.height / 2 - cy);
     else if (lost) { target = n.s.angle + 7 + Math.sin(time * 0.6 + n.phase) * 9; sway = false; } // nothing to find: it wanders
     else if (n.aim) {
@@ -103,7 +107,7 @@ function tick(time: number, deltaMs: number) {
     const value = r.format === 'point' ? compassPoint(r.s.angle) : formatBearing(r.s.angle);
     if (r.value.textContent !== value) r.value.textContent = value;
     if (!r.label) continue;
-    const label = attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(section?.deg ?? r.s.angle));
+    const label = locked ? 'locked' : attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(section?.deg ?? r.s.angle));
     if (r.label.textContent !== label) r.label.textContent = label;
   }
 }
@@ -185,10 +189,29 @@ export function startCompass() {
       const label = format ? null : document.querySelector<HTMLElement>(`[data-bearing-label="${name}"]`);
       return s ? [{ value, label, s, format }] : [];
     });
+    // Arrival. One accent pulse on the NE marks and the email's arrow as the needle locks.
+    if (!lost) {
+      ScrollTrigger.create({
+        trigger: '#contact',
+        start: 'top 40%',
+        onToggle: ({ isActive }) => {
+          locked = isActive;
+          if (!isActive) return;
+          // Flash, then fade back to the stylesheet (reset first, so a quick re-lock never ends on a stale value).
+          const pulse = (targets: string, props: string, from: gsap.TweenVars) => {
+            gsap.set(targets, { clearProps: props });
+            gsap.from(targets, { ...from, duration: 0.7, ease: ease.soft, autoRound: false, overwrite: true, clearProps: props });
+          };
+          pulse('.header .dial__tick.is-ne, #contact .dial__tick.is-ne', 'strokeWidth', { strokeWidth: 5 });
+          const accent = getComputedStyle(document.documentElement).getPropertyValue('--c-accent-ink').trim();
+          pulse('.footer__mail .arrow', 'color,scale', { color: accent, scale: 1.35 });
+        },
+      });
+    }
     // The dial draws itself around the ring, then the needle is let go and swings to the northeast.
     const ticks = document.querySelectorAll('.compass:not(.compass--mini) .dial__tick');
     if (ticks.length) intro.from(ticks, { autoAlpha: 0, duration: 0.3, stagger: 0.008, ease: 'none' }, 0);
     if (held) intro.add(() => { held = false; }, 0.25);
-    return () => { needles = []; readouts = []; attract = null; section = null; };
+    return () => { needles = []; readouts = []; attract = null; section = null; locked = false; };
   });
 }

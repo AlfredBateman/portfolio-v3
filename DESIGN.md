@@ -80,7 +80,9 @@ that steps 45° per section toward NE: home runs Work 135°, So far 090°, Conta
 destination); About and the case studies run their own sequences, and every page ends on the Contact waypoint at 045°.
 The header needle rests on the bearing of the waypoint section in view and the readout names its compass point; a
 hovered or focused target still wins. Scrolling jolts the needles only when its speed changes (start, stop, flick):
-a compass carried steadily points true. Case-study hero figures run their own system at rest (the bus laps the route, Raft heartbeats, the type
+a compass carried steadily points true. Arrival: once the Contact footer passes 40% of the screen every needle locks
+on exactly 045°, the sway and jolts stop dead, the readout reads `045.0° locked`, and the NE mark and the email's arrow
+pulse once. Scrolling back up releases it through the spring. Not on the 404, where the needle stays lost. Case-study hero figures run their own system at rest (the bus laps the route, Raft heartbeats, the type
 checker walking the tree, a radar-style forecast loop). The About hero shows the live header bearing.
 
 **Composition plan**
