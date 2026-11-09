@@ -5,16 +5,21 @@
 //   2. its waypoint's [data-aim] text while that text is on screen (inner pages: the needle turns
 //      toward what you are reading), else
 //   3. the pointer, if it is within the needle's reach (data-reach, in dial radii).
-// Scroll velocity and page transitions kick it; a slow two-sine sway keeps it alive at rest.
+// Changes in scroll speed jolt it, like carrying a real compass: starting, stopping or flicking the page makes the needle
+// lag and swing, steady scrolling leaves it on its bearing. Page transitions kick it too; a slow two-sine sway keeps it
+// alive at rest.
 // The readouts ([data-bearing="<needle>"]) print the live bearing and what the needle points at.
 // Reduced motion: none of this runs; CSS holds every needle at 045° (or 200° on the 404).
 import { gsap } from 'gsap';
-import { isTouch, onPage, onScroll, prefersReducedMotion } from '../engine';
+import { isTouch, onPage, onScroll, prefersReducedMotion, scrollState } from '../engine';
 
 const HOME = 45;
 const K = 70; // stiffness
 const C = 8.5; // damping (about 0.5 of critical: one clear overshoot, then settle)
 const MAX_VEL = 900; // deg/s
+const JOLT = 0.035; // deg/s of needle spin per px/s change in scroll speed
+const JOLT_SPEED = 8000; // px/s: scroll speed is clamped here, which bounds the biggest jolt (a flick)
+const JOLT_SMOOTH = 10; // 1/s: low-pass on the measured speed, so frame jitter in a steady scroll does not jolt
 
 type State = { angle: number; vel: number };
 type Needle = { el: HTMLElement; s: State; reach: number; phase: number; aim: HTMLElement | null };
@@ -27,6 +32,8 @@ let held = true; // first load: point north until the intro releases the needle
 let lost = false;
 let pointer: { x: number; y: number } | null = null;
 let attract: HTMLElement | null = null;
+let scrollY0 = 0;
+let scrollV = 0; // smoothed scroll speed, px/s
 
 const norm = (a: number) => ((a % 360) + 360) % 360;
 const diff = (from: number, to: number) => ((((to - from) % 360) + 540) % 360) - 180;
@@ -50,6 +57,13 @@ export function kick(v = 420) {
 function tick(time: number, deltaMs: number) {
   const dt = Math.min(deltaMs / 1000, 1 / 30);
   const a = attract?.isConnected ? attract.getBoundingClientRect() : null;
+  // Jolt from the change in scroll speed (not the speed itself: a compass carried steadily points true).
+  const { y } = scrollState();
+  const v = gsap.utils.clamp(-JOLT_SPEED, JOLT_SPEED, deltaMs > 0 ? ((y - scrollY0) * 1000) / deltaMs : 0);
+  scrollY0 = y;
+  const dv = (v - scrollV) * Math.min(1, dt * JOLT_SMOOTH);
+  scrollV += dv;
+  const jolt = dv * JOLT;
   for (const n of needles) {
     const r = n.el.getBoundingClientRect();
     if (r.bottom < 0 || r.top > innerHeight || !r.width) continue; // off screen: rests where it is
@@ -73,6 +87,7 @@ function tick(time: number, deltaMs: number) {
       target = HOME + diff(HOME, bearing(dx, dy)) * w;
     }
     if (sway) target += Math.sin(time * 0.8 + n.phase) * 0.9 + Math.sin(time * 2.1 + n.phase * 2) * 0.35;
+    n.s.vel += jolt;
     const acc = K * diff(n.s.angle, target) - C * n.s.vel;
     n.s.vel = gsap.utils.clamp(-MAX_VEL, MAX_VEL, n.s.vel + acc * dt);
     n.s.angle += n.s.vel * dt;
@@ -108,11 +123,9 @@ export function startCompass() {
   document.addEventListener('focusin', (e) => { attract = find(e.target); });
   document.addEventListener('focusout', () => { attract = null; });
 
-  // Moving the page jolts the needle, like moving a real compass. On touch there is no hover, so the
-  // project row nearest the middle of the screen does the pulling.
+  // On touch there is no hover, so the project row nearest the middle of the screen does the pulling.
   const touch = isTouch();
-  onScroll(({ velocity }) => {
-    for (const s of states.values()) s.vel += gsap.utils.clamp(-40, 40, velocity * 0.7);
+  onScroll(() => {
     if (!touch) return;
     let best: HTMLElement | null = null;
     let bestD = innerHeight * 0.22;
@@ -132,6 +145,8 @@ export function startCompass() {
 
   onPage(({ intro }) => {
     lost = !!document.querySelector('[data-compass="lost"]');
+    scrollY0 = scrollState().y; // the jump to the top of a new page is not a jolt
+    scrollV = 0;
     attract = null;
     needles = [...document.querySelectorAll<HTMLElement>('[data-needle]')].map((el, i) => {
       const name = el.dataset.needle!;
