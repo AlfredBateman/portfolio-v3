@@ -312,13 +312,23 @@ html.is-scrolled .header { border-color: var(--c-line); }
     grid-template-rows: auto auto auto auto;
     align-content: space-between;
   }
-  /* Sized so the name and both CTAs fit the first screen of a phone with its browser bars showing. */
-  .hero__compass { grid-column: 1; grid-row: 1; width: min(56vw, 30svh); margin-top: var(--u); }
+  /* Takes what height is left once the intro, name and CTAs are placed (about 28rem), so they all stay in the first screen. */
+  .hero__compass { grid-column: 1; grid-row: 1; width: clamp(6rem, calc(100svh - 28rem), 56vw); margin-top: var(--u); }
   .hero__intro { grid-column: 1; grid-row: 2; padding: calc(var(--u) * 2.5) 0 calc(var(--u) * 2); font-size: 1.1875rem; }
   .hero__name { grid-column: 1; grid-row: 3; }
   .hero__foot { grid-column: 1; grid-row: 4; flex-direction: column; align-items: stretch; gap: 1rem; }
   .hero__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); order: -1; } /* buttons before the degree line */
   .hero__foot .cta { justify-content: space-between; padding-inline: 1rem; white-space: normal; }
+}
+
+/* Wide enough to sit beside the intro, which frees the height the name and CTAs need. */
+@media (min-width: 480px) and (max-width: 767px) {
+  .hero { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: auto auto auto; }
+  .hero__intro { grid-column: 1; grid-row: 1; align-self: center; }
+  .hero__compass { grid-column: 2; grid-row: 1; align-self: center; width: min(100%, 36svh); margin-top: 0; }
+  .hero__name, .hero__foot { grid-column: 1 / -1; }
+  .hero__name { grid-row: 2; }
+  .hero__foot { grid-row: 3; }
 }
 
 .hero__actions { display: flex; gap: 0.75rem; }
