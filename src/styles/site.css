@@ -441,7 +441,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
   color: var(--c-bg);
   container-type: inline-size;
 }
-.footer :focus-visible { outline-color: #ff6a5c; }
+.footer :focus-visible { outline-color: var(--c-accent-ink); }
 .footer__top {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -465,8 +465,8 @@ html.is-scrolled .header { border-color: var(--c-line); }
   gap: var(--gutter);
   margin: calc(var(--u) * 6) -0.75rem 0;
   padding: calc(var(--u) * 2) 0.75rem calc(var(--u) * 1.5);
-  border-top: 1px solid rgb(237 238 234 / 0.25);
-  border-bottom: 1px solid rgb(237 238 234 / 0.25);
+  border-top: 1px solid color-mix(in srgb, var(--c-bg) 25%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-bg) 25%, transparent);
   font-size: calc(84cqi / (var(--chars, 16) * 0.62));
   font-weight: 800;
   font-stretch: 125%;
@@ -563,7 +563,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .pfig__query { font-size: 21px; }
 .pfig__stage { font-size: 16px; }
 .pfig__chip { fill: var(--c-bg); stroke: var(--c-fg); stroke-width: 1.5; }
-.pfig__mark { fill: rgb(196 34 26 / 0.12); }
+.pfig__mark { fill: color-mix(in srgb, var(--c-accent) 12%, transparent); }
 .pfig__quote { font-style: italic; fill: var(--c-muted); font-size: 17px; }
 .pfig__check rect { fill: var(--c-bg); stroke: var(--c-fg); stroke-width: 1.5; }
 .pfig__check path { fill: none; stroke: var(--c-bg); stroke-width: 2.5; }
@@ -581,7 +581,7 @@ g.is-hot > .pfig__node { fill: var(--c-accent); stroke: var(--c-accent); }
 .pfig__text { font: 500 19px/1 var(--f-body); fill: var(--c-fg); }
 .pfig__strong { font-weight: 700; font-stretch: 112%; }
 .pfig__muted { fill: var(--c-muted); font-weight: 500; }
-g.is-hot > .pfig__strong { fill: #fff; }
+g.is-hot > .pfig__strong { fill: var(--c-bg); }
 
 @media (max-width: 1023px) {
   .case__side { grid-column: 7 / -1; }

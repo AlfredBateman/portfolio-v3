@@ -27,7 +27,7 @@ button { background: none; border: 0; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4 { font-weight: inherit; font-size: inherit; text-wrap: balance; }
 p { text-wrap: pretty; }
-::selection { background: var(--c-accent); color: #fff; }
+::selection { background: var(--c-accent); color: var(--c-bg); }
 
 /* Accessibility */
 :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 0; }
