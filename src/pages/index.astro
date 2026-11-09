@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Compass from '../components/Compass.astro';
 import Arrow from '../components/Arrow.astro';
 import Waypoint from '../components/Waypoint.astro';
+import ProjectFigure from '../components/ProjectFigure.astro';
 import { href, projects, site } from '../data/site';
 import { emWidth } from '../data/fit';
 ---
@@ -41,7 +42,7 @@ import { emWidth } from '../data/fit';
     <ol class="index">
       {projects.map((p) => (
         <li>
-          <a class="row flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>
+          <a class="row flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title} data-peek={p.slug}>
             <span class="row__title" style={`--em:${emWidth(p.title)}`}>{p.title}</span>
             <span class="row__summary">{p.summary}</span>
             <span class="row__kind">{p.kind}</span>
@@ -51,6 +52,11 @@ import { emWidth } from '../data/fit';
         </li>
       ))}
     </ol>
+    <div class="peek" aria-hidden="true">
+      <div class="peek__card">
+        {projects.map((p) => <div data-peek-for={p.slug} hidden><ProjectFigure slug={p.slug} /></div>)}
+      </div>
+    </div>
   </section>
 
   <section class="facts" aria-labelledby="facts-title" data-waypoint>

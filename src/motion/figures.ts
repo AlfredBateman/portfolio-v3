@@ -3,7 +3,8 @@
 //   stockpilot    a query is typed, and the stages that answer it light up
 //   investorlens  the guards tick one by one before the finding is approved
 //   canvaslint    the scrubber walks the recorded frames and the log follows
-// Paused off screen; skipped under reduced motion (the static figure is complete).
+// Case pages: paused off screen; skipped under reduced motion (the static figure is complete).
+// The home work list (peek.ts) starts and stops the same runners on hover, through figure().
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { onPage, prefersReducedMotion } from '../engine';
@@ -69,25 +70,58 @@ function canvaslint(svg: SVGSVGElement): Run {
   };
 }
 
-const kinds: Record<string, (svg: SVGSVGElement) => Run> = { agentprobe, stockpilot, investorlens, canvaslint };
+// Each kind: how to build its runner, and the length of its loop in seconds.
+const kinds: Record<string, [(svg: SVGSVGElement) => Run, number]> = {
+  agentprobe: [agentprobe, 7],
+  stockpilot: [stockpilot, 13.5],
+  investorlens: [investorlens, 5],
+  canvaslint: [canvaslint, 8.8],
+};
+
+export type Figure = {
+  start(): void; // from the first frame, on the ticker (no-op if already running)
+  stop(): void; // off the ticker, frame left as is
+  end(): void; // the last frame of the loop, static
+};
+
+/** The runner for a [data-live] figure, started and stopped on demand. Starting twice never doubles the ticker work. */
+export function figure(fig: HTMLElement): Figure | undefined {
+  const svg = fig.querySelector('svg');
+  const kind = kinds[fig.dataset.live!];
+  if (!svg || !kind) return;
+  const [make, period] = kind;
+  const run = make(svg);
+  let t0 = 0;
+  let on = false;
+  const tick = () => run(gsap.ticker.time - t0);
+  return {
+    start() {
+      if (on) return;
+      on = true;
+      t0 = gsap.ticker.time;
+      gsap.ticker.add(tick);
+    },
+    stop() {
+      on = false;
+      gsap.ticker.remove(tick);
+    },
+    end: () => run(period - 0.01),
+  };
+}
 
 export function startFigures() {
   if (prefersReducedMotion()) return;
   onPage(() => {
-    const fig = document.querySelector<HTMLElement>('[data-live]');
-    const svg = fig?.querySelector('svg');
-    const make = fig ? kinds[fig.dataset.live!] : undefined;
-    if (!fig || !svg || !make) return;
-    const run = make(svg);
-    const t0 = gsap.ticker.time;
-    const tick = () => run(gsap.ticker.time - t0);
+    const el = document.querySelector<HTMLElement>('.case__figure [data-live]');
+    const f = el && figure(el);
+    if (!el || !f) return;
     const st = ScrollTrigger.create({
-      trigger: fig,
+      trigger: el,
       start: 'top bottom',
       end: 'bottom top',
-      onToggle: (s) => (s.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)),
+      onToggle: (s) => (s.isActive ? f.start() : f.stop()),
     });
-    if (st.isActive) gsap.ticker.add(tick);
-    return () => { gsap.ticker.remove(tick); st.kill(); };
+    if (st.isActive) f.start();
+    return () => { f.stop(); st.kill(); };
   });
 }

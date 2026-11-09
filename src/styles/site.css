@@ -412,6 +412,16 @@ html.is-scrolled .header { border-color: var(--c-line); }
 }
 .row:focus-visible { outline-offset: -4px; outline-color: var(--c-accent); }
 
+/* Previews: the case figure beside the pointer (src/motion/peek.ts moves the panel and fades the card). */
+.peek { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .peek { display: block; position: fixed; left: 0; top: 0; z-index: 1; width: clamp(22rem, 30vw, 28rem); pointer-events: none; will-change: transform; }
+}
+.peek__card { visibility: hidden; opacity: 0; padding: 1rem; background: var(--c-bg); border: 1px solid var(--c-fg); }
+.peek .rise-block { animation: none; }
+.peek svg { width: 100%; max-height: none; }
+.peek figcaption { display: none; }
+
 @media (max-width: 1023px) {
   .row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0.75rem; }
   .row__title { grid-column: 1; grid-row: 1; font-size: min(4.5rem, calc(84cqi / var(--em, 6))); }
