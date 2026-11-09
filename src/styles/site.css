@@ -332,6 +332,16 @@ html.is-scrolled .header { border-color: var(--c-line); }
 }
 
 .hero__actions { display: flex; gap: 0.75rem; }
+
+/* Real NE (src/motion/true-ne.ts): touch only, under the compass. Out of flow, so revealing it moves nothing;
+   phones keep its room free (and the compass 2rem smaller) so the name and CTAs still fit the first screen. */
+.hero__true { position: absolute; top: 100%; left: 50%; translate: -50% 0; white-space: nowrap; font-size: var(--t-xs); color: var(--c-muted); }
+.hero__true[hidden] { display: none; }
+.hero__true[aria-pressed='true'] { color: var(--c-fg); }
+.hero__true:disabled { cursor: default; }
+@media (pointer: coarse) and (max-width: 479px) {
+  .hero__compass { width: clamp(6rem, calc(100svh - 30rem), 56vw); margin-bottom: 2rem; }
+}
 .cta--quiet { border-color: var(--c-line); }
 
 /* ---------- Home: work index ---------- */

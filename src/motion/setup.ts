@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ease, onScroll, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
 import { heading, kick, startCompass } from './compass';
 import { startFigures } from './figures';
+import { startTrueNE } from './true-ne';
 
 // Transitions are a needle swinging over the page: ink fills the wedge between two bearings, pivoting
 // on the header compass. From there the whole viewport lies between about 80° and 195°.
@@ -35,6 +36,7 @@ function sweep(el: HTMLElement, from: [number, number], to: [number, number], du
 export function setupMotion() {
   startCompass();
   startFigures();
+  startTrueNE();
 
   // Loader: the counter is a bearing, 000° to 045°.
   setLoaderFormat((p) => `${String(Math.round(p * 0.45)).padStart(3, '0')}°`);

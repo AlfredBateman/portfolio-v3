@@ -13,6 +13,7 @@
 // lag and swing, steady scrolling leaves it on its bearing. Page transitions kick it too; a slow two-sine sway keeps it
 // alive at rest.
 // The readouts ([data-bearing="<needle>"]) print the live bearing and what the needle points at.
+// Real NE (phones, src/motion/true-ne.ts): the device compass sets the hero needle's target, over everything but the intro.
 // Reduced motion: none of this runs; CSS holds every needle at 045° (or 200° on the 404).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -39,6 +40,7 @@ let pointer: { x: number; y: number } | null = null;
 let attract: HTMLElement | null = null;
 let section: { el: HTMLElement; deg: number } | null = null; // the waypoint section in view
 let locked = false; // arrived at the contact footer
+let trueNE: number | null = null; // screen angle of real northeast, from the device compass
 let scrollY0 = 0;
 let scrollV = 0; // smoothed scroll speed, px/s
 
@@ -54,6 +56,17 @@ export function heading() {
   const el = document.querySelector<HTMLElement>('.header [data-needle]');
   const r = el?.getBoundingClientRect();
   return { x: r ? r.left + r.width / 2 : 40, y: r ? r.top + r.height / 2 : 36, angle: states.get('header')?.angle ?? HOME };
+}
+
+/** Point the hero needle at real northeast (a screen angle), or null to hand it back to the field. */
+export function pointTrue(angle: number | null) {
+  trueNE = angle === null ? null : norm(angle);
+  if (!prefersReducedMotion()) return; // the ticker springs to it
+  // Reduced motion: no ticker, so set the needle and the label directly (null hands back to the stylesheet).
+  const el = document.querySelector<HTMLElement>('[data-needle="hero"]');
+  if (el) el.style.rotate = trueNE === null ? '' : `${trueNE}deg`;
+  const label = document.querySelector<HTMLElement>('[data-bearing-label="header"]');
+  if (label) label.textContent = trueNE === null ? 'NE' : 'true NE';
 }
 
 /** Jolt every needle (page transitions). */
@@ -80,6 +93,7 @@ function tick(time: number, deltaMs: number) {
     let target = rest;
     let sway = true;
     if (held) { target = 0; sway = false; }
+    else if (trueNE !== null && n.el.dataset.needle === 'hero') { target = trueNE; sway = false; }
     else if (locked) { target = HOME; sway = false; }
     else if (a) target = bearing(a.left + a.width / 2 - cx, a.top + a.height / 2 - cy);
     else if (lost) { target = n.s.angle + 7 + Math.sin(time * 0.6 + n.phase) * 9; sway = false; } // nothing to find: it wanders
@@ -107,7 +121,7 @@ function tick(time: number, deltaMs: number) {
     const value = r.format === 'point' ? compassPoint(r.s.angle) : formatBearing(r.s.angle);
     if (r.value.textContent !== value) r.value.textContent = value;
     if (!r.label) continue;
-    const label = locked ? 'locked' : attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(section?.deg ?? r.s.angle));
+    const label = trueNE !== null ? 'true NE' : locked ? 'locked' : attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(section?.deg ?? r.s.angle));
     if (r.label.textContent !== label) r.label.textContent = label;
   }
 }

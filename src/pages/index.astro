@@ -14,6 +14,7 @@ import { emWidth } from '../data/fit';
     </p>
     <div class="hero__compass">
       <Compass name="hero" reach={2.4} />
+      <button class="utility hero__true" type="button" data-true-ne aria-pressed="false" hidden>Point to real NE ↗</button>
     </div>
     <h1 class="hero__name rise" id="hero-title" style={`--em:${emWidth(site.short)}`}><span aria-hidden="true"><span>{site.short}</span></span><span class="sr-only">{site.name}, software engineer</span></h1>
     <div class="hero__foot">
