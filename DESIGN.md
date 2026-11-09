@@ -61,8 +61,9 @@ Section rhythm: hero full viewport, statement airy (28u), work normal (16u), fac
 
 **Shape:** zero radius everywhere. The only circles on the site are compass dials.
 
-**Motion language:** engine `ease.out` (expo.out) for entrances, `ease.inOut` for curtains. Reveals rise and drift right
-(from the southwest). The needle never tweens: it is a damped spring (k 70, c 8.5, about 0.5 damping ratio) so every move
+**Motion language:** engine `ease.out` (expo.out) for entrances, `ease.inOut` for curtains. Everything travels the 45°
+line: every entrance starts `--ne` lines (1.1, tokens.css) to the southwest with x = −y and settles northeast; hover
+nudges and exits move up and right by equal amounts. The needle never tweens: it is a damped spring (k 70, c 8.5, about 0.5 damping ratio) so every move
 overshoots once and settles. Page transition: an ink band sweeps diagonally from the SW corner to the NE corner, carrying
 the destination's name; the needle gets a kick and resettles on the new page.
 

@@ -5,13 +5,20 @@
 //   data-delay="0.2"                  extra delay (seconds)
 //   data-parallax="0.15"              scrubbed vertical drift (fraction of element height)
 // Every effect is skipped under reduced motion; CSS keeps content visible without JS.
-// This site: everything travels northeast, so reveals rise AND drift in from the left.
+// This site: everything travels northeast, so every entrance starts --ne lines to the SW (x = -y) and settles at 45°.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { ease, prefersReducedMotion } from './env';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+
+/** The shared entrance offset in px for `el`: --ne (tokens.css) times its line height. Enter from (-d, d), leave to (d, -d). */
+export function neOffset(el: Element) {
+  const cs = getComputedStyle(el);
+  const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2; // 'normal' has no px value
+  return parseFloat(cs.getPropertyValue('--ne')) * lh;
+}
 
 const durations = { lines: 1.2, words: 1.1, chars: 0.9 } as const;
 const staggers = { lines: 0.08, words: 0.035, chars: 0.045 } as const;
@@ -34,9 +41,10 @@ function splitTween(el: HTMLElement, isIntro: boolean) {
       gsap.set(el, { visibility: 'visible' });
       if (s.done) return;
       const targets = type === 'lines' ? self.lines : type === 'words' ? self.words : self.chars;
+      const d = neOffset(el);
       s.tween = gsap.from(targets, {
-        yPercent: 110,
-        xPercent: type === 'chars' ? -18 : -2,
+        x: -d,
+        y: d,
         duration: durations[type],
         stagger: staggers[type],
         ease: ease.out,
@@ -58,7 +66,7 @@ function blockTween(el: HTMLElement, paused: boolean) {
     kind === 'fade' ? { autoAlpha: 0 }
     : kind === 'clip' ? { clipPath: 'inset(100% 0% 0% 0%)', autoAlpha: 1 }
     : kind === 'scale' ? { scale: 1.15, clipPath: 'inset(12% 12% 12% 12%)', autoAlpha: 1 }
-    : { y: 40, x: -24, autoAlpha: 0 };
+    : { x: -neOffset(el), y: neOffset(el), autoAlpha: 0 };
   const to: gsap.TweenVars = kind === 'clip' || kind === 'scale' ? { clipPath: 'inset(0% 0% 0% 0%)', scale: 1 } : {};
   gsap.set(el, { visibility: 'visible' });
   return gsap.fromTo(el, from, {

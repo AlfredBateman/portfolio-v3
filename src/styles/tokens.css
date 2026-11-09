@@ -56,6 +56,11 @@
   /* Motion (CSS side of the engine's ease names) */
   --e-out: cubic-bezier(0.16, 1, 0.3, 1);
   --e-inout: cubic-bezier(0.87, 0, 0.13, 1);
+  /* The one entrance offset, in lines of the moving element (reveal.ts reads it too). Everything enters from the SW and
+     leaves to the NE: x = -y, so the path is exactly 45°. 1.1 lines also clears a line mask. */
+  --ne: 1.1;
+  --from-sw: calc(var(--ne) * -1lh) calc(var(--ne) * 1lh);
+  --to-ne: calc(var(--ne) * 1lh) calc(var(--ne) * -1lh);
 
   /* Layers */
   --z-content: 1;

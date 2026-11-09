@@ -134,12 +134,12 @@ a:focus-visible > .roll::after { translate: 0 0; }
 .rise > span > span { display: inline-block; animation: rise 1.1s var(--e-out) 0.3s both; }
 .rise-block { animation: rise-block 1.1s var(--e-out) 0.3s both; }
 .hero__intro.rise-block { animation-delay: 0.5s; }
-@keyframes rise { from { translate: -4% 110%; } }
+@keyframes rise { from { translate: var(--from-sw); } }
 /* The hero name waits for the desktop loader; phones have no loader, so it paints at once (it is the LCP). */
 @media (min-width: 768px) {
   html.js.motion:not(.loader-seen):has(#loader:not([hidden])) :is(.hero__name > span > span, .hero__intro) { animation-play-state: paused; }
 }
-@keyframes rise-block { from { opacity: 0.01; translate: -0.3em 0.35em; } }
+@keyframes rise-block { from { opacity: 0.01; translate: var(--from-sw); } }
 
 /* ---------- Compass ---------- */
 
