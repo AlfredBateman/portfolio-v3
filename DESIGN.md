@@ -75,8 +75,12 @@ the destination's name; the needle gets a kick and resettles on the new page.
 
 **Idle state:** the needle never fully freezes. A slow two-sine sway of about 1° (a real needle trembles) runs on the GSAP
 ticker; the readout digits follow. Off under reduced motion (needle fixed at 045°).
-Inner pages: every section label is a waypoint, a small compass whose needle turns toward the text beside it with a
-live bearing. Case-study hero figures run their own system at rest (the bus laps the route, Raft heartbeats, the type
+Every section label is a waypoint, a small compass whose needle turns toward the text beside it, with a fixed bearing
+that steps 45° per section toward NE: home runs Work 135°, So far 090°, Contact 045° (the hero needs none, it shows the
+destination); About and the case studies run their own sequences, and every page ends on the Contact waypoint at 045°.
+The header needle rests on the bearing of the waypoint section in view and the readout names its compass point; a
+hovered or focused target still wins. Scrolling jolts the needles only when its speed changes (start, stop, flick):
+a compass carried steadily points true. Case-study hero figures run their own system at rest (the bus laps the route, Raft heartbeats, the type
 checker walking the tree, a radar-style forecast loop). The About hero shows the live header bearing.
 
 **Composition plan**

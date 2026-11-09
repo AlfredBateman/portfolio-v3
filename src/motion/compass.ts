@@ -4,13 +4,16 @@
 //      the project row nearest the middle of the screen), else
 //   2. its waypoint's [data-aim] text while that text is on screen (inner pages: the needle turns
 //      toward what you are reading), else
-//   3. the pointer, if it is within the needle's reach (data-reach, in dial radii).
+//   3. the pointer, if it is within the needle's reach (data-reach, in dial radii), else
+//   4. its resting bearing: a waypoint needle holds its section's bearing; the header needle takes the bearing of the
+//      waypoint section in view (the readout names its compass point); anything else rests on 045°.
 // Changes in scroll speed jolt it, like carrying a real compass: starting, stopping or flicking the page makes the needle
 // lag and swing, steady scrolling leaves it on its bearing. Page transitions kick it too; a slow two-sine sway keeps it
 // alive at rest.
 // The readouts ([data-bearing="<needle>"]) print the live bearing and what the needle points at.
 // Reduced motion: none of this runs; CSS holds every needle at 045° (or 200° on the 404).
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isTouch, onPage, onScroll, prefersReducedMotion, scrollState } from '../engine';
 
 const HOME = 45;
@@ -22,7 +25,7 @@ const JOLT_SPEED = 8000; // px/s: scroll speed is clamped here, which bounds the
 const JOLT_SMOOTH = 10; // 1/s: low-pass on the measured speed, so frame jitter in a steady scroll does not jolt
 
 type State = { angle: number; vel: number };
-type Needle = { el: HTMLElement; s: State; reach: number; phase: number; aim: HTMLElement | null };
+type Needle = { el: HTMLElement; s: State; reach: number; phase: number; aim: HTMLElement | null; rest: () => number };
 type Readout = { value: HTMLElement; label: HTMLElement | null; s: State; format: string };
 
 const states = new Map<string, State>();
@@ -32,6 +35,7 @@ let held = true; // first load: point north until the intro releases the needle
 let lost = false;
 let pointer: { x: number; y: number } | null = null;
 let attract: HTMLElement | null = null;
+let section: { el: HTMLElement; deg: number } | null = null; // the waypoint section in view
 let scrollY0 = 0;
 let scrollV = 0; // smoothed scroll speed, px/s
 
@@ -69,7 +73,8 @@ function tick(time: number, deltaMs: number) {
     if (r.bottom < 0 || r.top > innerHeight || !r.width) continue; // off screen: rests where it is
     const cx = r.left + r.width / 2;
     const cy = r.top + r.height / 2;
-    let target = HOME;
+    const rest = n.rest();
+    let target = rest;
     let sway = true;
     if (held) { target = 0; sway = false; }
     else if (a) target = bearing(a.left + a.width / 2 - cx, a.top + a.height / 2 - cy);
@@ -84,7 +89,7 @@ function tick(time: number, deltaMs: number) {
       const dy = pointer.y - cy;
       const R = r.width / 2;
       const w = gsap.utils.clamp(0, 1, (R * n.reach - Math.hypot(dx, dy)) / (R * n.reach - R));
-      target = HOME + diff(HOME, bearing(dx, dy)) * w;
+      target = rest + diff(rest, bearing(dx, dy)) * w;
     }
     if (sway) target += Math.sin(time * 0.8 + n.phase) * 0.9 + Math.sin(time * 2.1 + n.phase * 2) * 0.35;
     n.s.vel += jolt;
@@ -98,7 +103,7 @@ function tick(time: number, deltaMs: number) {
     const value = r.format === 'point' ? compassPoint(r.s.angle) : formatBearing(r.s.angle);
     if (r.value.textContent !== value) r.value.textContent = value;
     if (!r.label) continue;
-    const label = attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(r.s.angle));
+    const label = attract?.dataset.attract ?? (lost ? 'lost' : compassPoint(section?.deg ?? r.s.angle));
     if (r.label.textContent !== label) r.label.textContent = label;
   }
 }
@@ -153,9 +158,26 @@ export function startCompass() {
       let s = states.get(name);
       if (!s) states.set(name, (s = { angle: 0, vel: 0 })); // a needle seen for the first time starts at north
       el.style.rotate = `${s.angle}deg`;
-      const aim = el.closest('[data-waypoint]')?.querySelector<HTMLElement>('[data-aim]') ?? null;
-      return { el, s, reach: Number(el.dataset.reach || 0), phase: i * 1.7, aim };
+      const wp = el.closest('[data-waypoint]');
+      const aim = wp?.querySelector<HTMLElement>('[data-aim]') ?? null;
+      const deg = Number(wp?.querySelector<HTMLElement>('[data-deg]')?.dataset.deg ?? HOME);
+      const rest = name === 'header' ? () => section?.deg ?? HOME : () => deg;
+      return { el, s, reach: Number(el.dataset.reach || 0), phase: i * 1.7, aim, rest };
     });
+    // The section in view: the one crossing the middle of the screen.
+    section = null;
+    for (const el of document.querySelectorAll<HTMLElement>('[data-waypoint]')) {
+      const deg = Number(el.querySelector<HTMLElement>('[data-deg]')?.dataset.deg ?? HOME);
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top center',
+        end: 'bottom center',
+        onToggle: ({ isActive }) => {
+          if (isActive) section = { el, deg };
+          else if (section?.el === el) section = null;
+        },
+      });
+    }
     readouts = [...document.querySelectorAll<HTMLElement>('[data-bearing]')].flatMap((value) => {
       const name = value.dataset.bearing!;
       const s = states.get(name);
@@ -167,6 +189,6 @@ export function startCompass() {
     const ticks = document.querySelectorAll('.compass:not(.compass--mini) .dial__tick');
     if (ticks.length) intro.from(ticks, { autoAlpha: 0, duration: 0.3, stagger: 0.008, ease: 'none' }, 0);
     if (held) intro.add(() => { held = false; }, 0.25);
-    return () => { needles = []; readouts = []; attract = null; };
+    return () => { needles = []; readouts = []; attract = null; section = null; };
   });
 }

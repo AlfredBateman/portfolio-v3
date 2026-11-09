@@ -1,9 +1,11 @@
 ---
 import { href, site } from '../data/site';
 import Arrow from './Arrow.astro';
+import Waypoint from './Waypoint.astro';
 ---
-<footer class="footer" id="contact">
+<footer class="footer" id="contact" data-waypoint>
   <div class="footer__top">
+    <Waypoint id="contact" deg={45} />
     <h2 class="footer__title" data-split="lines">Point me somewhere.</h2>
     <p class="footer__lede">
       Graduate roles, internships, or a problem you think I would enjoy. Email reaches me fastest.

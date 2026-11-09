@@ -658,6 +658,11 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
   font-variant-numeric: tabular-nums;
 }
 .waypoint .label { padding: 0; margin: 0; }
+/* Home and footer: the waypoint sits on its own line above the section's heading. */
+:is(.work__head, .facts, .footer__top) > .waypoint { grid-column: 1 / -1; margin-bottom: calc(var(--u) * 2.5); }
+/* On ink, the dial is printed in reverse. */
+.footer .waypoint { --ink: var(--c-fg); --paper: var(--c-bg); }
+.footer .waypoint .compass { --c-fg: var(--paper); --c-bg: var(--ink); --c-accent: var(--c-accent-ink); }
 @media (max-width: 767px) {
   .waypoint { grid-column: 1 / -1; margin-bottom: 1.5rem; gap: 0.6rem; }
   .waypoint .compass { width: 2.25rem; }

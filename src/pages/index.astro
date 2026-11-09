@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Compass from '../components/Compass.astro';
 import Arrow from '../components/Arrow.astro';
+import Waypoint from '../components/Waypoint.astro';
 import { href, projects, site } from '../data/site';
 import { emWidth } from '../data/fit';
 ---
@@ -28,8 +29,9 @@ import { emWidth } from '../data/fit';
     </div>
   </section>
 
-  <section class="work" id="work" aria-labelledby="work-title">
+  <section class="work" id="work" aria-labelledby="work-title" data-waypoint>
     <div class="work__head">
+      <Waypoint id="work" deg={135} />
       <h2 id="work-title" data-split="chars">Work</h2>
       <p data-reveal="fade">
         Four projects, each with its repository and its tests. Two of them are live; open any one to see how it works.
@@ -50,7 +52,8 @@ import { emWidth } from '../data/fit';
     </ol>
   </section>
 
-  <section class="facts" aria-labelledby="facts-title">
+  <section class="facts" aria-labelledby="facts-title" data-waypoint>
+    <Waypoint id="facts" deg={90} />
     <h2 class="facts__title" id="facts-title">So far</h2>
     <dl class="facts__list">
       <div data-reveal data-delay="0">
