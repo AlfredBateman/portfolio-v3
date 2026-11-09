@@ -1,12 +1,14 @@
 // Global motion: runs once on the client, before the first page initializes.
 import { gsap } from 'gsap';
-import { ease, onScroll, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
+import { ease, neOffset, onScroll, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
 import { heading, kick, startCompass } from './compass';
 import { startFigures } from './figures';
 import { startTrueNE } from './true-ne';
 
 // Transitions are a needle swinging over the page: ink fills the wedge between two bearings, pivoting
-// on the header compass. From there the whole viewport lies between about 80° and 195°.
+// on the header compass. From there the whole viewport lies between about 80° and 195°. The moving edge always turns
+// from END back to START (counter-clockwise): across the middle of the screen it travels toward 045°, so the ink
+// arrives from the SW and leaves to the NE.
 const START = 75;
 const END = 212;
 function wedge(trail: number, lead: number) {
@@ -42,8 +44,8 @@ export function setupMotion() {
   setLoaderFormat((p) => `${String(Math.round(p * 0.45)).padStart(3, '0')}°`);
   setLoaderExit((root) =>
     gsap.timeline()
-      .to(root.querySelectorAll('[data-loader-out]'), { yPercent: -110, xPercent: 4, duration: 0.3, ease: ease.inOut, stagger: 0.03 })
-      .add(sweep(root, [START, END], [END, END], 0.6), '-=0.15'),
+      .to(root.querySelectorAll('[data-loader-out]'), { x: (_: number, el: Element) => neOffset(el), y: (_: number, el: Element) => -neOffset(el), duration: 0.3, ease: ease.inOut, stagger: 0.03 })
+      .add(sweep(root, [START, END], [START, START], 0.6), '-=0.15'),
   );
 
   // Page transition: an ink band sweeps across carrying the destination's name, set where the next title will sit.
@@ -63,14 +65,14 @@ export function setupMotion() {
       kick();
       return gsap.timeline()
         .set(c, { autoAlpha: 1 })
-        .add(sweep(panel, [START, START], [START, END], 0.8))
+        .add(sweep(panel, [END, END], [START, END], 0.8))
         .set(panel, { clipPath: 'none' }) // the wedge leaves a sliver behind the pivot: close it once covered
-        .from(label, { yPercent: 100, xPercent: -3, duration: 0.7, ease: ease.out }, 0.25);
+        .from(label, { x: -neOffset(label), y: neOffset(label), duration: 0.7, ease: ease.out }, 0.25);
     },
     enter: (c) => {
       const panel = c.querySelector<HTMLElement>('.curtain__panel')!;
       return gsap.timeline()
-        .add(sweep(panel, [START, END], [END, END], 0.85))
+        .add(sweep(panel, [START, END], [START, START], 0.85))
         .set(c, { autoAlpha: 0 });
     },
   });
