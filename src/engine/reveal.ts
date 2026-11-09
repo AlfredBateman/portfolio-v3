@@ -26,6 +26,9 @@ function splitTween(el: HTMLElement, isIntro: boolean) {
     type: type === 'lines' ? 'lines' : `lines,${type}`,
     mask: 'lines',
     autoSplit: true,
+    // aria-label is only valid on headings; on a <p> leave the real text in place for screen readers.
+    // ponytail: words/chars on a non-heading would read fragmented, switch to 'hidden' + a visually-hidden copy then.
+    aria: /^H[1-6]$/.test(el.tagName) ? 'auto' : 'none',
     linesClass: 'split-line',
     onSplit(self) {
       gsap.set(el, { visibility: 'visible' });
