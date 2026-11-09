@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # jury evidence and score cards
 .jury/
+
+# /brag launch video output
+brag-output*/
