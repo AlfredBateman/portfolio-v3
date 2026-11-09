@@ -26,7 +26,7 @@
   --c-muted: #4f535a;
   --c-quiet: #868985;   /* large display text only: 3.04:1 on --c-bg, the floor for large text */
   --c-line: rgb(18 19 21 / 0.14);
-  --c-accent: #c4221a;  /* needle red: needle north, the NE mark, focus */
+  --c-accent: #c4221a;  /* needle red means northeast: needle tip, ईशान, NE tick, the lock pulse. Else only focus and alerts. */
   --c-accent-ink: #ff6a5c; /* accent on ink: the footer focus ring */
   --c-curtain: var(--c-fg);
   --c-panel: #e2e4df;   /* code panels */

@@ -90,7 +90,7 @@ a:focus-visible > .roll::after { translate: 0 0; }
 .link {
   padding-block: 0.3em;
   background:
-    linear-gradient(var(--c-accent) 0 0) left calc(100% - 0.15em) / 0% 2px no-repeat,
+    linear-gradient(currentColor 0 0) left calc(100% - 0.15em) / 0% 2px no-repeat,
     linear-gradient(currentColor 0 0) left calc(100% - 0.15em) / 100% 1px no-repeat;
   transition: background-size 0.5s var(--e-out);
 }
@@ -208,7 +208,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .nav__link[aria-current] .roll, .nav__link:focus-visible .roll { background-size: 100% 1.5px; }
 .nav__link:focus-visible { outline: none; }
 .nav__link:focus-visible .roll { color: var(--c-accent); background-image: linear-gradient(var(--c-accent) 0 0); background-size: 100% 2px; }
-@media (hover: hover) { .nav__link:hover .roll { background-image: linear-gradient(var(--c-accent) 0 0); background-size: 100% 2px; } }
+@media (hover: hover) { .nav__link:hover .roll { background-size: 100% 2px; } }
 
 @media (max-width: 767px) {
   .readout__label { display: none; }
@@ -399,7 +399,6 @@ html.is-scrolled .header { border-color: var(--c-line); }
   .row:hover .row__title { translate: 0.12em -0.12em; }
 }
 .row:focus-visible .row__title { translate: 0.12em -0.12em; }
-.row.is-aimed .arrow { color: var(--c-accent); }
 .row.is-aimed .row__title { translate: 0.08em -0.08em; }
 .row:focus-visible { outline-offset: -4px; outline-color: var(--c-accent); }
 
@@ -585,20 +584,19 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .pfig__query { font-size: 21px; }
 .pfig__stage { font-size: 16px; }
 .pfig__chip { fill: var(--c-bg); stroke: var(--c-fg); stroke-width: 1.5; }
-.pfig__mark { fill: color-mix(in srgb, var(--c-accent) 12%, transparent); }
+.pfig__mark { fill: color-mix(in srgb, var(--c-fg) 10%, transparent); }
 .pfig__quote { font-style: italic; fill: var(--c-muted); font-size: 17px; }
 .pfig__check rect { fill: var(--c-bg); stroke: var(--c-fg); stroke-width: 1.5; }
 .pfig__check path { fill: none; stroke: var(--c-bg); stroke-width: 2.5; }
 .pfig__check.is-done rect { fill: var(--c-fg); }
-.pfig__check:last-child.is-done rect { fill: var(--c-accent); stroke: var(--c-accent); }
 .pfig__bar { fill: var(--c-fg); }
 .pfig__bar.is-hot, .pfig__flag { fill: var(--c-accent); }
-.pfig__scrub line { stroke: var(--c-accent); stroke-width: 2; }
-.pfig__scrub rect { fill: var(--c-accent); }
+.pfig__scrub line { stroke: var(--c-fg); stroke-width: 2; }
+.pfig__scrub rect { fill: var(--c-fg); }
 .pfig__code { font-family: var(--f-mono); font-size: 17px; fill: var(--c-muted); }
 .pfig__code.is-on { fill: var(--c-fg); font-weight: 700; }
 .pfig__node { fill: var(--c-bg); stroke: var(--c-fg); stroke-width: 1.5; }
-g.is-hot > .pfig__node { fill: var(--c-accent); stroke: var(--c-accent); }
+g.is-hot > .pfig__node { fill: var(--c-fg); stroke: var(--c-fg); }
 .pfig__node, .pfig__strong { transition: fill 0.35s var(--e-out), stroke 0.35s var(--e-out); }
 .pfig__text { font: 500 19px/1 var(--f-body); fill: var(--c-fg); }
 .pfig__strong { font-weight: 700; font-stretch: 112%; }
@@ -641,7 +639,7 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
   border-left: 1px solid var(--c-fg);
   border-top: 1px solid var(--c-fg);
 }
-.pipeline__step:last-child { border-top-color: var(--c-accent); border-top-width: 3px; }
+.pipeline__step:last-child { border-top-width: 3px; }
 .pipeline__label {
   font-size: var(--t-m);
   font-weight: 700;

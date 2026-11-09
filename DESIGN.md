@@ -44,7 +44,9 @@ Screenshot:  the hero: a 60vh dial, red needle on NE, ईशान at the NE mar
 - `ink` #121315, "graphite"
 - `muted` #4F535A, secondary text (6.63:1 on ground)
 - `line` rgb(18 19 21 / 0.14), hairlines and dial ticks
-- `accent` #C4221A, "needle red", only the needle's north half, the NE mark and the focus ring. Never body text.
+- `accent` #C4221A, "needle red". Red means northeast: the needle's north half, ईशान, the NE tick and the lock pulse.
+  Otherwise only function: focus rings, text selection and the alerts in the case-study figures (the AgentProbe
+  regression, CanvasLint's lint warnings). Never decoration, never body text.
 - `curtain` = ink. Footer is an ink field with ground text.
 Red on near-black/near-white is close to an AI default; here it is literal: compass needles are red at the north end.
 
