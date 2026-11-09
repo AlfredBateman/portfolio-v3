@@ -35,6 +35,7 @@ const states = new Map<string, State>();
 let needles: Needle[] = [];
 let readouts: Readout[] = [];
 let held = true; // first load: point north until the intro releases the needle
+let ishan: SVGTextElement | null = null; // the hero's ईशान, hidden until the released needle first crosses 045
 let lost = false;
 let pointer: { x: number; y: number } | null = null;
 let attract: HTMLElement | null = null;
@@ -67,6 +68,17 @@ export function pointTrue(angle: number | null) {
   if (el) el.style.rotate = trueNE === null ? '' : `${trueNE}deg`;
   const label = document.querySelector<HTMLElement>('[data-bearing-label="header"]');
   if (label) label.textContent = trueNE === null ? 'NE' : 'true NE';
+}
+
+/** Wipe ईशान on from its SW corner to its NE corner. The edge runs x = y in the text's own units, so it is at 45°. */
+function showIshan() {
+  document.documentElement.classList.add('is-ishan');
+  const t = ishan;
+  ishan = null;
+  if (!t) return;
+  const { width, height } = t.getBBox();
+  const wedge = (s: number) => `polygon(0px 100%, 0px calc(100% - ${s}px), ${s}px 100%)`;
+  gsap.fromTo(t, { clipPath: wedge(0) }, { clipPath: wedge(width + height), duration: 0.6, ease: ease.out, clearProps: 'clipPath' });
 }
 
 /** Jolt every needle (page transitions). */
@@ -111,9 +123,11 @@ function tick(time: number, deltaMs: number) {
     }
     if (sway) target += Math.sin(time * 0.8 + n.phase) * 0.9 + Math.sin(time * 2.1 + n.phase * 2) * 0.35;
     n.s.vel += jolt;
+    const toHome = diff(n.s.angle, HOME);
     const acc = K * diff(n.s.angle, target) - C * n.s.vel;
     n.s.vel = gsap.utils.clamp(-MAX_VEL, MAX_VEL, n.s.vel + acc * dt);
     n.s.angle += n.s.vel * dt;
+    if (ishan && toHome > 0 && toHome < 90 && diff(n.s.angle, HOME) <= 0 && n.el.dataset.needle === 'hero') showIshan();
     if (Math.abs(n.s.angle) > 7200) n.s.angle = norm(n.s.angle);
     n.el.style.rotate = `${n.s.angle.toFixed(2)}deg`;
   }
@@ -226,6 +240,10 @@ export function startCompass() {
     const ticks = document.querySelectorAll('.compass:not(.compass--mini) .dial__tick');
     if (ticks.length) intro.from(ticks, { autoAlpha: 0, duration: 0.3, stagger: 0.008, ease: 'none' }, 0);
     if (held) intro.add(() => { held = false; }, 0.25);
-    return () => { needles = []; readouts = []; attract = null; section = null; locked = false; };
+    // ईशान: on the first intro it waits for the needle (about 0.3 s after release); otherwise it is already there.
+    ishan = held ? document.querySelector<SVGTextElement>('.hero__compass .dial__ne') : null;
+    if (ishan) intro.add(showIshan, 1.5); // a pointer pulled the needle away and it never crossed: show it anyway
+    else showIshan();
+    return () => { needles = []; readouts = []; attract = null; section = null; locked = false; ishan = null; };
   });
 }

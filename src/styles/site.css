@@ -152,6 +152,8 @@ a:focus-visible > .roll::after { translate: 0 0; }
 .dial__label { font: 700 9px/1 var(--f-body); font-stretch: 125%; fill: var(--c-fg); text-anchor: middle; dominant-baseline: central; }
 .dial__num { font: 500 5px/1 var(--f-body); fill: var(--c-muted); text-anchor: middle; dominant-baseline: central; font-variant-numeric: tabular-nums; }
 .dial__ne { font: 800 13px/1 var(--f-deva); font-stretch: 112%; fill: var(--c-accent); text-anchor: middle; dominant-baseline: central; }
+/* First intro: the hero's ईशान waits for the needle to reach 045 (src/motion/compass.ts wipes it on). */
+html.motion:not(.is-ishan) .hero__compass .dial__ne { clip-path: polygon(0 100%, 0 100%, 0 100%); }
 .needle { position: absolute; inset: 0; rotate: 45deg; will-change: rotate; }
 .needle svg { width: 100%; height: 100%; }
 .needle__n { fill: var(--c-accent); }
