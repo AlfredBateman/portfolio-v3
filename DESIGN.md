@@ -42,7 +42,7 @@ Screenshot:  the hero: a 60vh dial, red needle on NE, ईशान at the NE mar
 **Palette** (a baseplate compass: printed black scale on pale acrylic, one red needle)
 - `ground` #EDEEEA, "chart": cool paper white, not cream
 - `ink` #121315, "graphite"
-- `muted` #575B61, secondary text (6.1:1 on ground)
+- `muted` #4F535A, secondary text (6.63:1 on ground)
 - `line` rgb(18 19 21 / 0.14), hairlines and dial ticks
 - `accent` #C4221A, "needle red", only the needle's north half, the NE mark and the focus ring. Never body text.
 - `curtain` = ink. Footer is an ink field with ground text.
