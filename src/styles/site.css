@@ -412,7 +412,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
-  padding: calc(var(--u) * 6) var(--gutter) calc(var(--u) * 14);
+  padding: calc(var(--u) * 6) var(--gutter) calc(var(--u) * 4); /* with the footer's top padding: the same 10u as Work to So far */
 }
 .facts__title { grid-column: 1 / -1; margin-bottom: calc(var(--u) * 2); font-size: var(--t-s); font-weight: 600; }
 .facts__list { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gutter); }
@@ -446,7 +446,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 92svh;
-  padding: calc(var(--u) * 12) var(--gutter) calc(var(--u) * 2.5);
+  padding: calc(var(--u) * 6) var(--gutter) calc(var(--u) * 2.5);
   background: var(--c-fg);
   color: var(--c-bg);
   container-type: inline-size;
@@ -499,7 +499,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .footer__links { display: flex; gap: 1.5rem; padding: 0; list-style: none; color: var(--c-bg); }
 
 @media (max-width: 767px) {
-  .footer { min-height: 0; padding-top: calc(var(--u) * 10); }
+  .footer { min-height: 0; }
   .footer__title, .footer__lede { grid-column: 1 / -1; }
   .footer__lede { margin-top: 1.25rem; }
   .footer__mail { margin-top: calc(var(--u) * 8); }
