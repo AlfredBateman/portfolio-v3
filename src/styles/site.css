@@ -71,12 +71,12 @@ body { font-stretch: 100%; }
 /* Nav: diagonal roll. The label leaves to the NE, its copy (a pseudo-element, silent to readers) arrives from the SW. */
 .roll { display: inline-grid; overflow: clip; padding-inline: 0.15em; margin-inline: -0.15em; }
 .roll > span, .roll::after { grid-area: 1 / 1; transition: translate 0.55s var(--e-out); }
-.roll::after { content: attr(data-label); content: attr(data-label) / ''; translate: -0.6em 110%; }
+.roll::after { content: attr(data-label); content: attr(data-label) / ''; translate: var(--from-sw); }
 @media (hover: hover) {
-  a:hover > .roll > span { translate: 0.6em -110%; }
+  a:hover > .roll > span { translate: var(--to-ne); }
   a:hover > .roll::after { translate: 0 0; }
 }
-a:focus-visible > .roll > span { translate: 0.6em -110%; }
+a:focus-visible > .roll > span { translate: var(--to-ne); }
 a:focus-visible > .roll::after { translate: 0 0; }
 @media (prefers-reduced-motion: reduce) {
   .roll::after { visibility: hidden; }
@@ -394,11 +394,11 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .row .arrow { grid-column: 12; justify-self: end; width: 1.5rem; height: 1.5rem; }
 .row__summary, .row__kind, .row__year { color: inherit; }
 @media (hover: hover) {
-  .row:hover .row__title { translate: 0.12em 0; }
+  .row:hover .row__title { translate: 0.12em -0.12em; }
 }
-.row:focus-visible .row__title { translate: 0.12em 0; }
+.row:focus-visible .row__title { translate: 0.12em -0.12em; }
 .row.is-aimed .arrow { color: var(--c-accent); }
-.row.is-aimed .row__title { translate: 0.08em 0; }
+.row.is-aimed .row__title { translate: 0.08em -0.08em; }
 .row:focus-visible { outline-offset: -4px; outline-color: var(--c-accent); }
 
 @media (max-width: 1023px) {
