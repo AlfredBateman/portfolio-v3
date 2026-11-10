@@ -121,3 +121,17 @@ installed; the figures are built by hand.
 
 **Theatre:** a first-visit loader (ink field, bearing counter 000° → 045°), no WebGL. Timed from navigation start; if the
 script boots after 1.2 s (slow phone) it skips the count and only sweeps away, so it never exceeds 2.6 s.
+
+## Northeast rules
+
+- **One motion line.** Everything travels the 45° SW→NE line: entrances start `--ne` lines to the southwest (x = −y), hover
+  nudges and exits leave to the northeast. No other direction of travel.
+- **Red means northeast.** `--c-accent` appears only on the needle's north half, ईशान, the NE tick and the lock pulse.
+  The only other uses are focus rings and data alerts (the AgentProbe regression, CanvasLint's warnings).
+- **Bearings step toward 045°.** Home: Work 135° → So far 090° → Contact 045°, locked. About: starts at 270° and ends at 045°.
+  Every page ends on the Contact waypoint at 045°.
+- **Scroll wobble.** The needles jolt only when scroll speed changes (start, stop, flick); steady scrolling leaves them true.
+  Once the Contact footer passes 40% of the screen they lock at contact: the sway and the jolts stop and the readout says
+  `045.0° locked`. Scrolling back up releases them through the spring. Not on the 404.
+- **Real NE on phones.** Where the device compass is available, the hero needle points at true northeast and the label reads
+  `true NE`. Otherwise it rests on 045° as drawn.

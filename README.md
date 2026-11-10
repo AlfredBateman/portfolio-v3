@@ -16,7 +16,7 @@ StockPilot, InvestorLens and CanvasLint), each with a live diagram of how it wor
 - [Astro](https://astro.build) 7: static output, page transitions through the ClientRouter
 - [GSAP](https://gsap.com) + [Lenis](https://lenis.darkroom.engineering): one animation clock, smooth scroll
 - Plain CSS with design tokens (`src/styles/tokens.css`); Archivo and Anek Devanagari, self-hosted
-- No trackers, no cookies. About 60 KB of JS (gzipped) per page.
+- No trackers, no cookies. About 63 KB of JS (gzipped) per page.
 
 ## Run it
 
