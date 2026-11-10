@@ -4,14 +4,14 @@ import Compass from '../components/Compass.astro';
 import Arrow from '../components/Arrow.astro';
 import Waypoint from '../components/Waypoint.astro';
 import ProjectFigure from '../components/ProjectFigure.astro';
-import { href, projects, site } from '../data/site';
+import { href, projects, site, testsLabel } from '../data/site';
 import { emWidth } from '../data/fit';
 ---
 <Base current="home" loader>
   <section class="hero" aria-labelledby="hero-title">
     <p class="hero__intro rise-block">
       Final-year computer science student. I build backends and full-stack apps, and I write the tests:
-      over a thousand across four shipped projects. Looking for my first role as a software engineer.
+      {testsLabel} run in CI. Looking for my first role as a software engineer.
     </p>
     <div class="hero__compass">
       <Compass name="hero" reach={2.4} />
@@ -46,7 +46,7 @@ import { emWidth } from '../data/fit';
             <span class="row__title" style={`--em:${emWidth(p.title)}`}>{p.title}</span>
             <span class="row__summary">{p.summary}</span>
             <span class="row__kind">{p.kind}</span>
-            <span class="row__year">{p.status}</span>
+            <span class="row__year">{p.status}{p.tests > 0 && ` · ${p.tests.toLocaleString('en-US')} tests`}</span>
             <Arrow />
           </a>
         </li>
@@ -68,8 +68,8 @@ import { emWidth } from '../data/fit';
         <dd>4</dd>
       </div>
       <div data-reveal data-delay="0.08">
-        <dt>Automated tests across them</dt>
-        <dd>1,000+</dd>
+        <dt>Automated tests, run in CI</dt>
+        <dd>{testsLabel}</dd>
       </div>
       <div data-reveal data-delay="0.16">
         <dt>Internships. This site is part of fixing that</dt>

@@ -16,6 +16,8 @@ export type Project = {
   role: string;
   stack: string[];
   status: string;
+  tests: number; // automated tests that CI runs; 0 = none verifiable in CI
+  ci?: string; // the GitHub Actions workflow page that runs them
   pipeline: Step[]; // the "how it works" figure, read left to right
   context: string;
   idea: string;
@@ -36,8 +38,9 @@ export const site = {
   devanagari: 'ईशान',
   role: 'Software engineer, backend and full-stack',
   url: 'https://alfredbateman.github.io/portfolio-v3',
-  description:
-    'Ishan Sharma is a final-year computer science student who builds and tests backend and full-stack software: four shipped projects, 1,000+ automated tests.',
+  get description() {
+    return `Ishan Sharma is a final-year computer science student who builds and tests backend and full-stack software: four shipped projects, ${testsLabel} automated tests run in CI.`;
+  },
   email: 'ishan.sh.1148@gmail.com',
   resume: 'ishan-sharma-resume.pdf',
   socials: [
@@ -55,6 +58,8 @@ export const projects: Project[] = [
     role: 'Backend, statistics, dashboard and CI',
     stack: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Docker', 'GitHub Actions'],
     status: 'Live on Vercel',
+    tests: 1561, // 1173 pytest + 353 vitest + 49 Playwright, all run by ci.yml
+    ci: 'https://github.com/AlfredBateman/AgentProbe/actions/workflows/ci.yml',
     pipeline: [
       { label: 'Test case', note: 'A task for the agent, with the tools it may call' },
       { label: 'Repeated runs', note: 'Ten runs per case in the shipped suites' },
@@ -108,6 +113,7 @@ export const projects: Project[] = [
     role: 'Team lead, team of three',
     stack: ['React', 'Node.js', 'Express', 'TypeScript', 'MongoDB Atlas', 'Render', 'GitHub Actions'],
     status: 'v1.2.0, live on Render',
+    tests: 0, // 519 local Vitest cases, but no workflow runs them yet
     pipeline: [
       { label: 'Plain English', note: 'Type what you mean, typos included' },
       { label: 'Typo fixing', note: 'Words are corrected before anything parses them' },
@@ -149,6 +155,7 @@ export const projects: Project[] = [
     role: 'Design and build',
     stack: ['Next.js 16', 'TypeScript', 'Prisma', 'SQLite', 'Zod', 'Gemini API'],
     status: 'v1.0.0',
+    tests: 0, // no test cases; CI runs lint, typecheck, one assertion script and the build
     pipeline: [
       { label: 'Transcript', note: 'An interview, linked to its study' },
       { label: 'Gemini extraction', note: 'Opt-in: up to 15 candidate pain points per transcript' },
@@ -189,6 +196,7 @@ export const projects: Project[] = [
     role: 'Design and build',
     stack: ['TypeScript', 'React', 'Zustand', 'Vite', 'Chrome Manifest V3'],
     status: 'v1.1.0',
+    tests: 0, // 96 local cases (48 Vitest + 48 Playwright), but no workflow runs them yet
     pipeline: [
       { label: 'Page canvas', note: 'Any page drawing with Canvas 2D' },
       { label: 'Recorder', note: 'Every Canvas 2D call, captured as it happens' },
@@ -216,6 +224,9 @@ export const projects: Project[] = [
     repo: 'https://github.com/AlfredBateman/CanvasLint',
   },
 ];
+
+// Sum of CI-verified tests, rounded down to the hundred, e.g. "1,500+".
+export const testsLabel = `${(Math.floor(projects.reduce((n, p) => n + p.tests, 0) / 100) * 100).toLocaleString('en-US')}+`;
 
 export const about = {
   education: {

@@ -41,6 +41,12 @@ const jsonLd = {
           {meta.map((m) => (
             <div><dt>{m.k}</dt><dd>{m.v}</dd></div>
           ))}
+          {p.ci && (
+            <div>
+              <dt>Tests</dt>
+              <dd>{p.tests.toLocaleString('en-US')} <a class="link" href={p.ci} rel="noopener" target="_blank">CI ↗</a></dd>
+            </div>
+          )}
           <div class="case__links">
             <dt>Links</dt>
             <dd>
