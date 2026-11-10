@@ -14,10 +14,10 @@ import { runLoader } from './loader';
 import { playEnter, playLeave } from './transition';
 import { prefersReducedMotion } from './env';
 
-export { onScroll, scrollState, scrollToTarget, stopScroll, startScroll } from './scroll';
+export { onScroll, scrollState, stopScroll, startScroll } from './scroll';
 export { setTransition } from './transition';
 export { setLoaderFormat, setLoaderExit } from './loader';
-export { ease, isTouch, isMobile, prefersReducedMotion } from './env';
+export { ease, isTouch, prefersReducedMotion } from './env';
 
 export type PageFn = (page: { intro: gsap.core.Timeline; path: string }) => void | (() => void);
 const pageFns = new Set<PageFn>();

@@ -29,17 +29,14 @@
   --c-accent: #c4221a;  /* needle red means northeast: needle tip, ईशान, NE tick, the lock pulse. Else only focus and alerts. */
   --c-accent-ink: #ff6a5c; /* accent on ink: the footer focus ring */
   --c-curtain: var(--c-fg);
-  --c-panel: #e2e4df;   /* code panels */
   --c-ink-muted: #a3a6a2; /* muted text on ink */
 
   /* Type */
-  --f-display: 'Archivo', 'Arial Black', system-ui, sans-serif;
   --f-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-deva: 'Anek Devanagari', 'Nirmala UI', 'Kohinoor Devanagari', sans-serif;
   --f-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
 
   --t-xl: clamp(2.75rem, 1.3rem + 6vw, 7rem);
-  --t-l: clamp(1.75rem, 1.2rem + 2.1vw, 3.25rem);
   --t-m: clamp(1.25rem, 1.08rem + 0.7vw, 1.75rem);
   --t-body: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
   --t-s: 0.9375rem;
@@ -50,12 +47,8 @@
   --gutter: clamp(1rem, 0.6rem + 1.6vw, 2.5rem);
   --header-h: 4.5rem;
 
-  /* Shape: square everything. The only circles are compasses. */
-  --radius: 0px;
-
   /* Motion (CSS side of the engine's ease names) */
   --e-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --e-inout: cubic-bezier(0.87, 0, 0.13, 1);
   /* The one entrance offset, in lines of the moving element (reveal.ts reads it too). Everything enters from the SW and
      leaves to the NE: x = -y, so the path is exactly 45°. 1.1 lines also clears a line mask. */
   --ne: 1.1;

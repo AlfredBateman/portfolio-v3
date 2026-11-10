@@ -55,8 +55,3 @@ export function resetScroll() {
   state.y = 0;
   state.velocity = 0;
 }
-export function scrollToTarget(target: string | HTMLElement | number) {
-  if (lenis) lenis.scrollTo(target, { duration: 1.4, easing: (t) => 1 - Math.pow(1 - t, 4) });
-  else if (typeof target === 'number') scrollTo({ top: target });
-  else (typeof target === 'string' ? document.querySelector(target) : target)?.scrollIntoView();
-}

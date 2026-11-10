@@ -18,7 +18,7 @@ const MAX = 0.9; // seconds: counting ends here; the exit fits well inside the 2
 const LATE = 0.9; // seconds: booted later than this (slow device): skip the count, exit at once
 
 function criticalAssets(): Promise<unknown>[] {
-  const imgs = [...document.querySelectorAll<HTMLImageElement>('img[data-critical], [data-intro] img, [data-gl-instant] img')];
+  const imgs = [...document.querySelectorAll<HTMLImageElement>('img[data-critical], [data-intro] img')];
   return [document.fonts.ready, ...imgs.map((i) => (i.complete ? Promise.resolve() : i.decode().catch(() => {})))];
 }
 
@@ -33,7 +33,6 @@ export async function runLoader(): Promise<void> {
     return finish(root);
   }
   const count = root.querySelector<HTMLElement>('[data-loader-count]');
-  const bar = root.querySelector<HTMLElement>('[data-loader-bar]');
   const tasks = criticalAssets();
   let done = 0;
   const shown = { v: 0 };
@@ -48,7 +47,6 @@ export async function runLoader(): Promise<void> {
       shown.v += (goal - shown.v) * 0.2;
       if (goal === 100 && shown.v > 99.5) shown.v = 100;
       if (count) count.textContent = format(shown.v);
-      if (bar) bar.style.transform = `scaleX(${shown.v / 100})`;
       if (shown.v === 100) { gsap.ticker.remove(tick); resolve(); }
     };
     gsap.ticker.add(tick);

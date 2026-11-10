@@ -1,9 +1,8 @@
 // Declarative motion through data attributes. Authoring happens in markup:
 //   data-split="lines|words|chars"   masked text reveal (SplitText), on scroll or on intro
-//   data-reveal="up|fade|clip|scale"  block reveal
+//   data-reveal="up|fade"             block reveal
 //   data-intro                        play with the page intro instead of on scroll
 //   data-delay="0.2"                  extra delay (seconds)
-//   data-parallax="0.15"              scrubbed vertical drift (fraction of element height)
 // Every effect is skipped under reduced motion; CSS keeps content visible without JS.
 // This site: everything travels northeast, so every entrance starts --ne lines to the SW (x = -y) and settles at 45°.
 import { gsap } from 'gsap';
@@ -62,15 +61,9 @@ function splitTween(el: HTMLElement, isIntro: boolean) {
 function blockTween(el: HTMLElement, paused: boolean) {
   const kind = el.dataset.reveal || 'up';
   const delay = parseFloat(el.dataset.delay || '0');
-  const from: gsap.TweenVars =
-    kind === 'fade' ? { autoAlpha: 0 }
-    : kind === 'clip' ? { clipPath: 'inset(100% 0% 0% 0%)', autoAlpha: 1 }
-    : kind === 'scale' ? { scale: 1.15, clipPath: 'inset(12% 12% 12% 12%)', autoAlpha: 1 }
-    : { x: -neOffset(el), y: neOffset(el), autoAlpha: 0 };
-  const to: gsap.TweenVars = kind === 'clip' || kind === 'scale' ? { clipPath: 'inset(0% 0% 0% 0%)', scale: 1 } : {};
+  const from: gsap.TweenVars = kind === 'fade' ? { autoAlpha: 0 } : { x: -neOffset(el), y: neOffset(el), autoAlpha: 0 };
   gsap.set(el, { visibility: 'visible' });
   return gsap.fromTo(el, from, {
-    ...to,
     y: 0,
     x: 0,
     autoAlpha: 1,
@@ -96,14 +89,6 @@ export function initReveals(root: ParentNode = document) {
     const isIntro = el.hasAttribute('data-intro');
     const t = blockTween(el, isIntro);
     if (isIntro) intro.add(() => t.play(), 0);
-  });
-  root.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
-    const amount = parseFloat(el.dataset.parallax || '0.15');
-    gsap.fromTo(el, { yPercent: -amount * 100 }, {
-      yPercent: amount * 100,
-      ease: 'none',
-      scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: true },
-    });
   });
   return intro;
 }
