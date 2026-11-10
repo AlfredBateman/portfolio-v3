@@ -78,9 +78,9 @@ export const projects: Project[] = [
         text: 'Measured in simulation on unchanged flaky agents. The verdict statistics are computed in exact arithmetic.',
       },
       {
-        stat: '1,145',
+        stat: '1,173',
         label: 'pytest tests',
-        text: 'Plus 184 web unit tests and 14 Playwright end-to-end specs, with 97% coverage on the core and the API.',
+        text: 'Plus 353 web unit tests and 49 Playwright end-to-end specs, with 97% coverage on the core and the API.',
       },
       {
         stat: '3',
