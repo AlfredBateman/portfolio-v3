@@ -1,5 +1,7 @@
 # portfolio-v3
 
+[![Deploy](https://github.com/AlfredBateman/portfolio-v3/actions/workflows/deploy.yml/badge.svg)](https://github.com/AlfredBateman/portfolio-v3/actions/workflows/deploy.yml)
+
 The portfolio of **Ishan Sharma**, a final-year Computer Science Engineering student at Chitkara University looking for a
 software engineer role (backend / full-stack).
 
@@ -24,7 +26,11 @@ npm run dev        # http://localhost:4321/portfolio-v3/
 npm run build      # static site in dist/
 npm run preview
 npm run check      # type-check
+npm test           # site checks (run build first)
 ```
+
+`npm test` drives Chromium over every page at phone and desktop widths (HTTP 200, no console errors, no horizontal
+overflow, no serious axe violations) and confirms reduced motion leaves all text visible; a failure blocks the deploy.
 
 ## Edit the content
 
