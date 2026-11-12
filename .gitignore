@@ -31,3 +31,5 @@ pnpm-debug.log*
 
 # /brag launch video output
 brag-output*/
+
+Claude outputs/portfolio-v3-prompts.md
