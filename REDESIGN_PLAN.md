@@ -364,14 +364,14 @@ Each step ends the same way: `npm run build`, `npm run check`, `npm test`, scree
 
 ### Step 3 · Other sections (case studies, About, Contact / footer)
 
-- [ ] Reveal engine: remove `data-split` and `data-reveal` from every page, then delete `engine/reveal.ts`'s split path,
+- [x] Reveal engine: remove `data-split` and `data-reveal` from every page, then delete `engine/reveal.ts`'s split path,
       the SplitText import and the hidden-until-revealed CSS. Keep `neOffset` if anything still uses it.
 - [ ] Case studies: buttons for links, new section order, tightened pipeline, real headings, smaller statements,
       bearings by the shared rule, CanvasLint's in-development section.
-- [ ] About: new first screen (bio, facts, four actions), toolbox by project, education, certifications, colophon.
-- [ ] Footer: arrival dial, Copy button, full-size link rows, content height on phones.
-- [ ] Page transition: reveal at 0.5 s or less.
-- [ ] `text-size-adjust: 100%`.
+- [x] About: new first screen (bio, facts, four actions), toolbox by project, education, certifications, colophon.
+- [x] Footer: arrival dial, Copy button, full-size link rows, content height on phones.
+- [x] Page transition: reveal at 0.5 s or less.
+- [x] `text-size-adjust: 100%`.
 
 ### Step 4 · Review
 
@@ -431,6 +431,16 @@ problem, results, stack and my part, links. Between two projects a bearing tape 
 its index, scrubbed to the scroll and in step with the header needle. Nothing pins and no text moves: section 5 still
 holds. The test counts stay as recounted in decision 3; AgentProbe's README and the résumé PDF still carry the older
 1,145 / 184 / 14.
+
+Step 3 notes (17 Nov 2026): About, Contact and the footer are done; the case studies are not yet. About opens on the
+bio, the facts and four actions (Email, Résumé, GitHub, LinkedIn); its stops are Toolbox 225°, Education 180°,
+Certifications 135° and Colophon 090°, so every page now ends the same turn on Contact at 045°. The toolbox is each
+project's stack, then one "Also" row. The bio is drafted from the résumé and waits for my edit. The arrival dial follows
+the header needle's course, turns its last 45° as the footer comes in, and wipes ईशान on at the lock. Copy puts the
+address on the clipboard, or selects it where there is no clipboard. No text is hidden for a script on any page:
+`npm test` now checks every heading, paragraph, list item, fact and link in the page and the footer. Decision 6 changes:
+the phone header carries all five links (`Work · About · GitHub · Résumé · Contact`), so every section is one tap away;
+under 480 px the brand is the needle alone, and it keeps its label.
 
 Step 1 notes: on 16:9 laptops under
 750 px tall the name gives up width so the strip stays on the first screen; on phones under about 700 px tall the
