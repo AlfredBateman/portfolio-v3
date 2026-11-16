@@ -8,7 +8,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { initScroll, resetScroll, startScroll, stopScroll } from './scroll';
-import { initReveals } from './reveal';
+
 export { neOffset } from './reveal';
 import { playEnter, playLeave } from './transition';
 import { prefersReducedMotion } from './env';
@@ -49,7 +49,7 @@ export function syncFlags() {
 function initPage() {
   syncFlags();
   ctx = gsap.context(() => {
-    intro = initReveals(document);
+    intro = gsap.timeline({ paused: true }); // the page intro: drivers add to it (the hero needle's release)
   });
   ready = true;
   pageFns.forEach(runPageFn);

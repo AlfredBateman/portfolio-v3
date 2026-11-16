@@ -5,13 +5,13 @@ import { href, site } from '../data/site';
 interface Props { current?: 'home' | 'work' | 'about'; lost?: boolean }
 const { current, lost = false } = Astro.props;
 const onHome = Astro.url.pathname === href();
-// GitHub and the résumé are on every page, one tap away. `wide` links give way to them on phones.
+// Every section, GitHub and the résumé are on every page, one tap away, phones included.
 const links = [
   { label: 'Work', href: onHome ? '#work' : `${href()}#work`, current: current === 'work' ? ('true' as const) : undefined, dest: true },
   { label: 'About', href: href('about/'), current: current === 'about' ? ('page' as const) : undefined, dest: true },
   { label: 'GitHub', href: site.github, external: true },
   { label: 'Résumé', href: href(site.resume), download: true },
-  { label: 'Contact', href: '#contact', dest: true, wide: true },
+  { label: 'Contact', href: '#contact', dest: true },
 ];
 ---
 <header class="header">
@@ -26,7 +26,7 @@ const links = [
   <nav class="nav" aria-label="Main">
     <ul>
       {links.map((l) => (
-        <li class:list={{ 'nav__wide': l.wide }}>
+        <li>
           <a
             class="nav__link"
             href={l.href}

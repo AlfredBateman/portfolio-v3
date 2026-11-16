@@ -4,8 +4,8 @@
 * { margin: 0; }
 html {
   overflow-x: clip;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   background: var(--c-bg);
   color: var(--c-fg);
 }
@@ -51,11 +51,6 @@ html.lenis, html.lenis body { height: auto; }
 
 #main { position: relative; z-index: var(--z-content); }
 
-/* Hidden-until-revealed (only when motion is allowed and JS runs) */
-.motion [data-split], .motion [data-reveal] { visibility: hidden; }
-.split-line { padding-bottom: 0.08em; margin-bottom: -0.08em; }
-[data-split] > * , [data-split] > * > * { text-indent: 0; }
-[data-split] > :first-child, [data-split] > :first-child > :first-child { text-indent: inherit; }
 
 /* Curtain (page transitions) */
 #curtain { position: fixed; inset: 0; z-index: var(--z-curtain); pointer-events: none; visibility: hidden; overflow: hidden; }

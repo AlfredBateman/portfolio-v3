@@ -247,14 +247,19 @@ export const about = {
     when: 'Expected August 2027',
     core: ['Data structures and algorithms', 'Object-oriented programming', 'System design', 'Database management systems', 'Operating systems'],
   },
-  toolbox: [
-    { group: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'C++', 'C', 'SQL'] },
-    { group: 'Backend and databases', items: ['FastAPI', 'Node.js', 'Express.js', 'REST APIs', 'PostgreSQL', 'MongoDB', 'SQLite', 'Prisma ORM'] },
-    { group: 'Frontend', items: ['React', 'Next.js', 'Zustand', 'Vite', 'Tailwind CSS', 'Chrome extensions (Manifest V3)'] },
-    { group: 'DevOps and testing', items: ['CI/CD with GitHub Actions', 'Docker', 'Linux', 'AWS', 'Git', 'Unit, integration and end-to-end testing', 'Playwright', 'Vitest', 'pytest'] },
-    { group: 'AI and LLMs', items: ['Gemini API', 'LiteLLM', 'Model Context Protocol (MCP)', 'LLM-agent evaluation', 'Schema validation with Zod'] },
-  ],
+  // The toolbox is evidence: each project's `stack` (above), then the rest of the résumé's skills here.
+  also: ['JavaScript', 'Java', 'C++', 'C', 'SQL', 'pytest', 'Vitest', 'Playwright', 'Tailwind CSS', 'LiteLLM', 'Model Context Protocol (MCP)', 'Linux', 'AWS', 'Git'],
   certifications: ['AWS Cloud Practitioner Essentials', 'AWS Cloud Quest', 'Nutanix NHCF', 'Infosys Springboard (Python, Testing)'],
-  lookingFor:
-    'A software engineer role, backend or full-stack. My projects lean the same way: typed APIs, real databases, CI on every push, and tests that catch a regression before anyone else does.',
+  // Drafted from the résumé, to edit.
+  bio: [
+    'I’m a final-year computer science student at Chitkara University, and I build backend and full-stack software.',
+    'I like typed APIs, real databases, CI on every push, and tests that catch a regression before anyone else does. On AgentProbe I wrote the statistics that decide whether a change is a real regression; on StockPilot I led a team of three.',
+    'Next I want to do that work on a team that ships.',
+  ],
+  facts: [
+    { k: 'Graduating', v: 'August 2027' },
+    { k: 'Looking for', v: 'SDE, backend or full-stack' },
+    { k: 'Open to', v: 'Internships now, full-time from 2027. Remote or on-site in India' },
+    { k: 'Based in', v: 'Chandigarh, India' },
+  ],
 };

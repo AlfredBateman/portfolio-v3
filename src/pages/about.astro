@@ -2,52 +2,63 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import Waypoint from '../components/Waypoint.astro';
-import { about, href, site } from '../data/site';
-const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
+import { about, href, projects, site } from '../data/site';
+const linkedin = site.socials.find((s) => s.label === 'LinkedIn')!.href;
 ---
 <Base
   title="About"
-  description="About Ishan Sharma: final-year Computer Science Engineering student at Chitkara University. Education, toolbox, certifications, and the role Ishan is looking for."
+  description="About Ishan Sharma: final-year Computer Science Engineering student at Chitkara University, looking for a backend or full-stack role. Bio, toolbox by project, education and certifications."
   current="about"
 >
+  {/* The first screen answers who this is and how to reach him. Everything is in the first paint. */}
   <section class="about-hero" aria-labelledby="about-title">
-    <h1 id="about-title" class="rise-block">
-      I’m <strong>Ishan Sharma</strong>. I’m&nbsp;finishing a <strong>computer science degree</strong> and looking for a <strong>backend</strong> or <strong>full-stack&nbsp;role</strong>.
-    </h1>
-    <dl class="about-hero__meta" data-reveal="fade" data-intro data-delay="0.6">
-      <div><dt>Heading</dt><dd><span class="tnum" data-bearing="header">045.0°</span> <span data-bearing="header" data-format="point">NE</span></dd></div>
-      <div><dt>Graduating</dt><dd>{about.education.when}</dd></div>
-      <div><dt>Reach me</dt><dd><a class="link" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+    <h1 id="about-title">About</h1>
+    <div class="about-hero__bio">
+      {about.bio.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="about-hero__actions">
+      <a class="cta cta--primary flood" href={`mailto:${site.email}`} data-attract="Email">Email me <Arrow /></a>
+      <a class="cta flood" href={href(site.resume)} download data-attract="Résumé">Résumé (PDF) <Arrow down /></a>
+      <a class="cta flood" href={site.github} rel="me noopener" target="_blank" data-attract="GitHub">GitHub <Arrow /></a>
+      <a class="cta flood" href={linkedin} rel="me noopener" target="_blank" data-attract="LinkedIn">LinkedIn <Arrow /></a>
+    </div>
+    <dl class="about-hero__facts">
+      {about.facts.map((f) => <div><dt>{f.k}</dt><dd>{f.v}</dd></div>)}
+      <div><dt>Email</dt><dd><a class="link" href={`mailto:${site.email}`}>{site.email}</a></dd></div>
     </dl>
   </section>
 
+  {/* Four stops on the turn: 225°, 180°, 135°, 090°, then Contact on 045° in the footer. */}
   <div class="rows">
-    <section class="arow" aria-labelledby="edu-title" data-waypoint data-reveal>
-      <Waypoint id="edu" label="Education" deg={270} />
+    <section class="arow" aria-labelledby="tools-title" data-waypoint>
+      <Waypoint id="tools" label="Toolbox" deg={225} />
+      <div class="arow__body" data-aim>
+        <dl class="kit">
+          {projects.map((p) => (
+            <div>
+              <dt><a class="link" href={href(`work/${p.slug}/`)} data-dest={p.title}>{p.title}</a></dt>
+              <dd><ul class="tags">{p.stack.map((s) => <li class="tag">{s}</li>)}</ul></dd>
+            </div>
+          ))}
+          <div>
+            <dt>Also</dt>
+            <dd><ul class="tags">{about.also.map((s) => <li class="tag">{s}</li>)}</ul></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="arow" aria-labelledby="edu-title" data-waypoint>
+      <Waypoint id="edu" label="Education" deg={180} />
       <div class="arow__body" data-aim>
         <p class="arow__lead">{about.education.school}</p>
-        <p class="arow__muted">{about.education.degree}. {about.education.place}. {about.education.when}.</p>
-        <h3 class="arow__sub">Core concepts</h3>
-        <ul class="ruled ruled--2">
-          {about.education.core.map((c) => <li>{c}</li>)}
-        </ul>
+        <p>{about.education.degree}. {about.education.place}. {about.education.when}.</p>
+        <p class="arow__muted">Coursework: {about.education.core.join(', ').toLowerCase().replace(/^./, (c) => c.toUpperCase())}.</p>
       </div>
     </section>
 
-    <section class="arow" aria-labelledby="tools-title" data-waypoint data-reveal>
-      <Waypoint id="tools" label="Toolbox" deg={225} />
-      <div class="arow__body arow__groups" data-aim>
-        {about.toolbox.map((g) => (
-          <div>
-            <h3 class="arow__sub">{g.group}</h3>
-            <ul class="ruled ruled--sm">{g.items.map((i) => <li>{i}</li>)}</ul>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <section class="arow" aria-labelledby="certs-title" data-waypoint data-reveal>
-      <Waypoint id="certs" label="Certifications" deg={180} />
+    <section class="arow" aria-labelledby="certs-title" data-waypoint>
+      <Waypoint id="certs" label="Certifications" deg={135} />
       <div class="arow__body" data-aim>
         <ul class="ruled ruled--2">
           {about.certifications.map((c) => <li>{c}</li>)}
@@ -55,30 +66,8 @@ const bare = (u: string) => u.replace(/^https?:\/\/(www\.)?/, '');
       </div>
     </section>
 
-    <section class="arow" aria-labelledby="look-title" data-waypoint data-reveal>
-      <Waypoint id="look" label="What I’m looking for" deg={135} />
-      <div class="arow__body" data-aim>
-        <p class="arow__lead">{about.lookingFor}</p>
-        <div class="arow__actions">
-          <a class="cta flood" href={`mailto:${site.email}`} data-attract="Email">Email me <Arrow /></a>
-          <a class="cta cta--quiet flood" href={href(site.resume)} download data-attract="Résumé">Download résumé (PDF) <Arrow down /></a>
-        </div>
-      </div>
-    </section>
-
-    <section class="arow" aria-labelledby="elsewhere-title" data-waypoint data-reveal>
-      <Waypoint id="elsewhere" label="Elsewhere" deg={90} />
-      <div class="arow__body" data-aim>
-        <ul class="ruled ruled--links">
-          {site.socials.map((s) => (
-            <li><a class="link" href={s.href} rel="me noopener" target="_blank">{s.label}</a> <span class="arow__muted">{bare(s.href)}</span></li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <section class="arow" aria-labelledby="colophon-title" data-waypoint data-reveal>
-      <Waypoint id="colophon" label="Colophon" deg={45} />
+    <section class="arow" aria-labelledby="colophon-title" data-waypoint>
+      <Waypoint id="colophon" label="Colophon" deg={90} />
       <div class="arow__body" data-aim>
         <p>
           Set in Archivo, stretched wide for display and kept at normal width for reading, with Anek Devanagari

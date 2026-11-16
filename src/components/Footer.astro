@@ -1,28 +1,68 @@
 ---
+// Contact, the last stop on every page. The arrival dial turns the last 45° as the footer comes in and locks on 045°
+// (src/motion/compass.ts); its ईशान wipes on at the lock. Everything else is still.
 import { href, site } from '../data/site';
 import Arrow from './Arrow.astro';
+import Compass from './Compass.astro';
 import Waypoint from './Waypoint.astro';
+const rows = [
+  ...site.socials.map((s) => ({ label: s.label, href: s.href, external: true, download: false })),
+  { label: 'Résumé (PDF)', href: href(site.resume), external: false, download: true },
+];
 ---
-<footer class="footer" id="contact" data-waypoint>
+<footer class="footer" id="contact" data-waypoint data-stop="Contact">
   <div class="footer__top">
     <Waypoint id="contact" deg={45} />
-    <h2 class="footer__title" data-split="lines">Point me somewhere.</h2>
+    <h2 class="footer__title">Point me somewhere.</h2>
     <p class="footer__lede">
-      Graduate roles, internships, or a problem you think I would enjoy. Email reaches me fastest.
+      Open to software engineering internships now and full-time roles from 2027, backend or full-stack. Or send a
+      problem you think I would enjoy. Email reaches me fastest.
     </p>
+    <div class="footer__dial"><Compass name="arrival" /></div>
   </div>
-  <a class="footer__mail flood" href={`mailto:${site.email}`} style={`--chars:${site.email.length}`} data-attract="Email">
-    <span class="footer__address">{site.email}</span>
-    <Arrow />
-  </a>
-  <div class="footer__bottom">
-    <ul class="footer__links">
-      {site.socials.map((s) => (
-        <li><a class="utility" href={s.href} rel="me noopener" target="_blank">{s.label}</a></li>
-      ))}
-      <li><a class="utility" href={href(site.resume)} download>Résumé (PDF)</a></li>
-    </ul>
-    <p>Open to software engineering roles</p>
-    <p>© 2026 {site.name}. Set in Archivo and Anek Devanagari.</p>
+  <div class="footer__mailrow">
+    <a class="footer__mail flood" href={`mailto:${site.email}`} style={`--chars:${site.email.length}`} data-attract="Email">
+      <span class="footer__address">{site.email}</span>
+      <Arrow />
+    </a>
+    <button class="footer__copy flood" type="button" data-copy={site.email}>
+      <span aria-live="polite">Copy</span><span class="sr-only"> email address</span>
+    </button>
   </div>
+  <ul class="footer__links">
+    {rows.map((r) => (
+      <li>
+        <a
+          class="footer__row flood"
+          href={r.href}
+          data-attract={r.label}
+          download={r.download}
+          target={r.external ? '_blank' : undefined}
+          rel={r.external ? 'me noopener' : undefined}
+        >
+          {r.label} <Arrow down={r.download} />
+        </a>
+      </li>
+    ))}
+  </ul>
+  <p class="footer__bottom">© 2026 {site.name}. Set in Archivo and Anek Devanagari.</p>
 </footer>
+
+<script>
+  // Copy: mailto opens nothing on many work machines. Delegated, so it survives page swaps.
+  document.addEventListener('click', async (e) => {
+    const b = e.target instanceof Element ? e.target.closest<HTMLButtonElement>('[data-copy]') : null;
+    const label = b?.querySelector('[aria-live]');
+    if (!b || !label) return;
+    try {
+      await navigator.clipboard.writeText(b.dataset.copy!);
+      label.textContent = 'Copied';
+    } catch {
+      // No clipboard (insecure origin, denied): select the address so the visitor can copy it themselves.
+      const address = b.parentElement?.querySelector('.footer__address');
+      if (address) getSelection()?.selectAllChildren(address);
+      label.textContent = 'Selected';
+    }
+    setTimeout(() => { label.textContent = 'Copy'; }, 2000);
+  });
+</script>

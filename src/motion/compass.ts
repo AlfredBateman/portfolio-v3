@@ -12,7 +12,8 @@
 // from one to the next with the scroll. The readout names the stop. On the home page the projects are the stops:
 // 225°, 180°, 135°, 090°, then Contact on 045°.
 // Arrival: once the contact footer is well into view the needles lock on exactly 045°, the sway and the jolts stop and
-// the readout says "locked"; the dead-still needle after a living one is the moment of arrival. Not on the 404.
+// the readout says "locked"; the dead-still needle after a living one is the moment of arrival. The footer's full-size
+// dial turns its last 45° with the header and wipes ईशान on at the lock. Not on the 404.
 // Changes in scroll speed jolt it, like carrying a real compass: starting, stopping or flicking the page makes the needle
 // lag and swing, steady scrolling leaves it on its bearing. Page transitions kick it too; a slow two-sine sway keeps it
 // alive at rest.
@@ -104,14 +105,18 @@ export function pointTrue(angle: number | null) {
 }
 
 /** Wipe ईशान on from its SW corner to its NE corner. The edge runs x = y in the text's own units, so it is at 45°. */
+function wipe(t: SVGTextElement) {
+  const { width, height } = t.getBBox();
+  const wedge = (s: number) => `polygon(0px 100%, 0px calc(100% - ${s}px), ${s}px 100%)`;
+  gsap.fromTo(t, { clipPath: wedge(0) }, { clipPath: wedge(width + height), duration: 0.6, ease: ease.out, clearProps: 'clipPath' });
+}
+
 function showIshan() {
   document.documentElement.classList.add('is-ishan');
   const t = ishan;
   ishan = null;
   if (!t) return;
-  const { width, height } = t.getBBox();
-  const wedge = (s: number) => `polygon(0px 100%, 0px calc(100% - ${s}px), ${s}px 100%)`;
-  gsap.fromTo(t, { clipPath: wedge(0) }, { clipPath: wedge(width + height), duration: 0.6, ease: ease.out, clearProps: 'clipPath' });
+  wipe(t);
   // The NE tick answers the needle's arrival, once.
   gsap.from('.hero__compass .dial__tick.is-ne', { strokeWidth: 7, duration: 0.7, ease: ease.soft, autoRound: false, clearProps: 'strokeWidth' });
 }
@@ -224,7 +229,8 @@ export function startCompass() {
       const wp = el.closest('[data-waypoint]');
       const aim = wp?.querySelector<HTMLElement>('[data-aim]') ?? null;
       const deg = Number(wp?.querySelector<HTMLElement>('[data-deg]')?.dataset.deg ?? HOME);
-      const rest = name === 'header' ? () => courseAt(scrollY + innerHeight / 2) : () => deg;
+      // The header and the arrival dial follow the page's turn; the arrival dial is only on screen for its last 45°.
+      const rest = name === 'header' || name === 'arrival' ? () => courseAt(scrollY + innerHeight / 2) : () => deg;
       return { el, s, reach: Number(el.dataset.reach || 0), phase: i * 1.7, aim, rest };
     });
     // The stop at the middle of the screen: the readout names it, and it answers (.is-aimed, site.css).
@@ -266,6 +272,13 @@ export function startCompass() {
           pulse('.header .dial__tick.is-ne, #contact .dial__tick.is-ne', 'strokeWidth', { strokeWidth: 5 });
           const accent = getComputedStyle(document.documentElement).getPropertyValue('--c-accent-ink').trim();
           pulse('.footer__mail .arrow', 'color,scale', { color: accent, scale: 1.35 });
+          // The arrival dial's ईशान, once per page: the page ends on the picture the hero opened with.
+          const dial = document.querySelector('.footer__dial');
+          const ne = dial?.querySelector<SVGTextElement>('.dial__ne');
+          if (dial && ne && !dial.classList.contains('is-arrived')) {
+            dial.classList.add('is-arrived');
+            wipe(ne);
+          }
         },
       });
     }

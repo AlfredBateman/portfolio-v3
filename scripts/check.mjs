@@ -65,10 +65,12 @@ try {
       await ctx.close();
     }
     const { ctx, page } = await visit(browser, path, 390, 844, 'reduce');
+    // No text waits for a script: every heading, paragraph, list item, fact and link in the page is visible.
     const hidden = await page.evaluate(() =>
-      [...document.querySelectorAll('[data-split], [data-reveal]')]
+      [...document.querySelectorAll('main :is(h1, h2, h3, h4, p, li, dt, dd, a), footer :is(h2, p, li, a)')]
+        .filter((el) => el.textContent.trim() && !el.closest('.sr-only, [hidden]'))
         .filter((el) => !el.checkVisibility({ visibilityProperty: true, opacityProperty: true }))
-        .map((el) => el.tagName.toLowerCase() + '[' + (el.hasAttribute('data-split') ? 'data-split' : 'data-reveal') + ']'),
+        .map((el) => `${el.tagName.toLowerCase()} "${el.textContent.trim().slice(0, 30)}"`),
     );
     record(path, 'reduced-motion', hidden.map((h) => `hidden: ${h}`));
     await ctx.close();

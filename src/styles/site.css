@@ -149,6 +149,8 @@ a:focus-visible > .roll::after { translate: 0 0; }
 .dial__ne { font: 800 13px/1 var(--f-deva); font-stretch: 112%; fill: var(--c-accent); text-anchor: middle; dominant-baseline: central; }
 /* First intro: the hero's ईशान waits for the needle to reach 045 (src/motion/compass.ts wipes it on). */
 html.motion:not(.is-ishan) .hero__compass .dial__ne { clip-path: polygon(0 100%, 0 100%, 0 100%); }
+/* The arrival dial: its ईशान waits for the lock at Contact. */
+html.motion .footer__dial:not(.is-arrived) .dial__ne { clip-path: polygon(0 100%, 0 100%, 0 100%); }
 /* Drawn on its own bearing where it has one (a waypoint), else on northeast. Reduced motion keeps it there. */
 .needle { position: absolute; inset: 0; rotate: var(--rest, 45deg); will-change: rotate; }
 /* Motion on: a needle waits at north until compass.ts lets it go, and a full dial draws its ticks round the ring from
@@ -217,14 +219,20 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .nav__link:focus-visible .roll { color: var(--c-accent); background-image: linear-gradient(var(--c-accent) 0 0); background-size: 100% 2px; }
 @media (hover: hover) { .nav__link:hover .roll { background-size: 100% 2px; } }
 
-/* Phones: the readout and Contact give way to GitHub and the résumé (Contact is in the hero and the footer). */
+/* Phones: the readout gives way, so every section and both links stay one tap away. */
 @media (max-width: 767px) {
-  .readout, .brand__last, .nav__wide, .nav__link .arrow { display: none; }
+  .readout, .brand__last, .nav__link .arrow { display: none; }
   .header { gap: 0.75rem; }
   .brand { gap: 0.5rem; }
   .brand .compass { width: 2rem; }
   .nav ul { gap: 0.9rem; }
   .nav__link { font-size: 0.9375rem; }
+}
+/* Narrow phones: the brand is the needle alone (it keeps its label), so all five links fit on one line. */
+@media (max-width: 479px) {
+  .brand__name { display: none; }
+  .nav ul { gap: clamp(0.6rem, 4.5vw - 0.4rem, 1rem); }
+  .nav__link { font-size: clamp(0.875rem, 0.6rem + 1.2vw, 0.9375rem); }
 }
 
 /* ---------- Curtain ---------- */
@@ -397,7 +405,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
   align-items: end;
   padding: 0 var(--gutter) calc(var(--u) * 4);
 }
-.work__head h2 {
+.work__head h2, .about-hero h1 {
   grid-column: 1 / span 6;
   font-size: var(--t-xl);
   font-weight: 800;
@@ -528,13 +536,15 @@ html.is-scrolled .header { border-color: var(--c-line); }
 
 /* ---------- Footer ---------- */
 
+/* Contact, on ink. The title and lede to the southwest, the arrival dial to the northeast, then the address and three
+   full-size rows. Only the dial moves. */
 .footer {
   --flood: var(--c-bg);
   --flood-ink: var(--c-fg);
   position: relative;
   z-index: var(--z-content);
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto auto auto;
   min-height: 92svh;
   padding: calc(var(--u) * 6) var(--gutter) calc(var(--u) * 2.5);
   background: var(--c-fg);
@@ -545,56 +555,84 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .footer__top {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr;
   column-gap: var(--gutter);
-  align-items: end;
 }
 .footer__title {
   grid-column: 1 / span 7;
+  grid-row: 2;
   font-size: var(--t-xl);
   font-weight: 800;
   font-stretch: 125%;
   letter-spacing: -0.05em;
   line-height: 0.85;
 }
-.footer__lede { grid-column: 9 / -1; color: var(--c-ink-muted); font-size: var(--t-s); max-width: 34ch; }
+.footer__lede { grid-column: 1 / span 5; grid-row: 3; margin-top: calc(var(--u) * 2.5); max-width: 42ch; color: var(--c-ink-muted); }
+.footer__dial { grid-column: 9 / -1; grid-row: 1 / -1; justify-self: end; align-self: center; width: min(21rem, 26cqi, 40svh); }
+.footer__mailrow {
+  display: flex;
+  align-items: center;
+  gap: var(--gutter);
+  margin-top: calc(var(--u) * 6);
+  border-block: 1px solid color-mix(in srgb, var(--c-bg) 25%, transparent);
+}
 .footer__mail {
-  align-self: end;
+  flex: 1;
+  min-width: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: var(--gutter);
-  margin: calc(var(--u) * 6) -0.75rem 0;
+  margin-left: -0.75rem;
   padding: calc(var(--u) * 2) 0.75rem calc(var(--u) * 1.5);
-  border-top: 1px solid color-mix(in srgb, var(--c-bg) 25%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--c-bg) 25%, transparent);
-  font-size: calc(84cqi / (var(--chars, 16) * 0.62));
+  font-size: calc(74cqi / (var(--chars, 16) * 0.62));
   font-weight: 800;
   font-stretch: 125%;
   letter-spacing: -0.05em;
   line-height: 0.95;
   white-space: nowrap;
-  min-width: 0;
 }
 .footer__mail .arrow { width: 0.6em; height: 0.6em; margin-bottom: 0.08em; }
-.footer__bottom {
+.footer__copy {
+  flex: none;
+  min-width: 6.5rem;
+  min-height: 3rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--c-bg) 45%, transparent);
+  color: var(--c-bg);
+  font-size: var(--t-s);
+  font-weight: 600;
+  font-stretch: 112%;
+}
+.footer__links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gutter); padding: 0; list-style: none; }
+.footer__row {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem var(--gutter);
-  padding-top: calc(var(--u) * 2);
-  font-size: var(--t-xs);
-  color: var(--c-ink-muted);
+  gap: 1rem;
+  min-height: 3.5rem;
+  margin-inline: -0.75rem;
+  padding: calc(var(--u) * 1.5) 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--c-bg) 25%, transparent);
+  font-size: var(--t-m);
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
-.footer__links { display: flex; gap: 1.5rem; padding: 0; list-style: none; color: var(--c-bg); }
+.footer__row .arrow { width: 0.7em; height: 0.7em; }
+.footer__bottom { padding-top: calc(var(--u) * 2); font-size: var(--t-xs); color: var(--c-ink-muted); }
 
+/* Phones: as tall as its content, a smaller dial beside the stop, above the title. */
 @media (max-width: 767px) {
   .footer { min-height: 0; }
+  .footer__top > .waypoint { align-self: end; }
+  .footer__dial { grid-column: 7 / -1; grid-row: 1; width: 7.5rem; margin-bottom: calc(var(--u) * 2); }
   .footer__title, .footer__lede { grid-column: 1 / -1; }
-  .footer__lede { margin-top: 1.25rem; }
-  .footer__mail { margin-top: calc(var(--u) * 8); }
-  .footer__mail { font-size: calc(88cqi / (var(--chars, 16) * 0.62)); }
-  .footer__bottom { flex-direction: column; align-items: flex-start; }
+  .footer__mailrow { flex-wrap: wrap; gap: 0 var(--gutter); }
+  .footer__mail { flex-basis: 100%; font-size: calc(86cqi / (var(--chars, 16) * 0.62)); }
+  .footer__copy { margin-bottom: calc(var(--u) * 2); }
+  .footer__links { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------- Case study ---------- */
@@ -750,10 +788,10 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
   color: var(--c-fg);
 }
 /* Footer: the waypoint sits on its own line above the heading. */
-.footer__top > .waypoint { grid-column: 1 / -1; margin-bottom: calc(var(--u) * 2.5); }
+.footer__top > .waypoint { grid-column: 1 / span 7; grid-row: 1; margin-bottom: calc(var(--u) * 2.5); }
 /* On ink, the dial is printed in reverse. */
-.footer .waypoint { --ink: var(--c-fg); --paper: var(--c-bg); }
-.footer .waypoint .compass { --c-fg: var(--paper); --c-bg: var(--ink); --c-accent: var(--c-accent-ink); }
+.footer .waypoint, .footer__dial { --ink: var(--c-fg); --paper: var(--c-bg); }
+.footer .compass { --c-fg: var(--paper); --c-bg: var(--ink); --c-muted: var(--c-ink-muted); --c-accent: var(--c-accent-ink); }
 @media (max-width: 767px) {
   .waypoint { grid-column: 1 / -1; margin-bottom: 1.5rem; }
   .block .waypoint { margin-bottom: 0; }
@@ -850,39 +888,32 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
 
 /* ---------- About ---------- */
 
+/* The first screen: who, how I work, what next, and the four ways to reach me. Facts to the northeast. */
 .about-hero {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: 1fr auto;
   column-gap: var(--gutter);
-  min-height: 88svh;
-  padding: calc(var(--header-h) + var(--u) * 6) var(--gutter) calc(var(--u) * 5);
+  row-gap: calc(var(--u) * 2.5);
+  align-content: start;
+  padding: calc(var(--header-h) + var(--u) * 6) var(--gutter) calc(var(--u) * 7);
 }
-.about-hero h1 {
-  grid-column: 1 / span 10;
-  align-self: end;
-  font-size: var(--t-xl);
-  font-weight: 800;
-  font-stretch: 118%;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  margin-left: -0.04em;
-  color: var(--c-quiet); /* the sentence recedes, its keywords stay in ink */
-}
-.about-hero h1 strong { color: var(--c-fg); font-weight: inherit; }
-.about-hero__meta {
-  grid-column: 5 / -1;
-  grid-row: 2;
+.about-hero h1 { grid-column: 1 / -1; }
+.about-hero__bio {
+  grid-column: 1 / span 7;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gutter);
-  margin-top: calc(var(--u) * 6);
-  padding-top: 1rem;
-  border-top: 1px solid var(--c-fg);
-  font-size: var(--t-s);
+  gap: 0.9rem;
+  max-width: 46ch;
+  font-size: clamp(1.0625rem, 0.98rem + 0.4vw, 1.3125rem);
+  line-height: 1.4;
 }
-.about-hero__meta dt { font-size: var(--t-xs); color: var(--c-muted); margin-bottom: 0.2rem; }
-.about-hero__meta a { overflow-wrap: anywhere; }
+.about-hero__bio p:first-child { font-size: var(--t-m); line-height: 1.25; letter-spacing: -0.01em; }
+.about-hero__actions { grid-column: 1 / span 7; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.about-hero__facts { grid-column: 9 / -1; grid-row: 2 / span 2; align-self: start; font-size: var(--t-s); }
+.about-hero__facts div { padding-block: 0.7rem; border-top: 1px solid var(--c-line); }
+.about-hero__facts div:first-child { border-top-color: var(--c-fg); }
+.about-hero__facts dt { font-size: var(--t-xs); color: var(--c-muted); margin-bottom: 0.15rem; }
+.about-hero__facts dd { font-weight: 600; }
+.about-hero__facts a { overflow-wrap: anywhere; }
 
 .rows { padding-bottom: calc(var(--u) * 10); }
 .arow {
@@ -895,37 +926,31 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
 .arow__body { grid-column: 5 / span 7; display: grid; gap: 1rem; justify-items: start; max-width: 46rem; }
 .arow__lead { font-size: var(--t-m); line-height: 1.35; letter-spacing: -0.01em; }
 .arow__muted { color: var(--c-muted); }
-.arow__sub { font-size: var(--t-xs); font-weight: 600; color: var(--c-muted); margin-top: 0.5rem; }
-.arow__groups { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gutter); width: 100%; }
-.arow__groups .arow__sub { margin: 0 0 0.75rem; }
 .ruled { width: 100%; padding: 0; list-style: none; display: grid; column-gap: var(--gutter); }
 .ruled--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.ruled--links li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; align-items: baseline; }
-.ruled--links .arow__muted { font-size: var(--t-s); font-weight: 500; }
-.arow__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
 .ruled li {
   padding: 0.55rem 0 0.6rem;
   border-top: 1px solid var(--c-line);
-  font-size: var(--t-m);
-  font-weight: 700;
-  font-stretch: 112%;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  font-stretch: 105%;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
 }
-/* After .ruled li, which it overrides (same specificity). */
-.ruled--sm li { font-size: 1.0625rem; font-weight: 600; font-stretch: 105%; letter-spacing: -0.01em; padding-block: 0.45rem; }
-.arow__groups { justify-items: stretch; }
-.tnum { font-variant-numeric: tabular-nums; }
+/* Toolbox: the tools each project used, then the rest. */
+.kit { width: 100%; }
+.kit > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 0.5rem 1rem; align-items: baseline; padding-block: 0.85rem; border-top: 1px solid var(--c-line); }
+.kit > div:first-child { border-top-color: var(--c-fg); }
+.kit dt { font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; }
 
 @media (max-width: 767px) {
-  .about-hero { min-height: 80svh; }
-  .about-hero h1 { grid-column: 1 / -1; font-size: 2.125rem; }
-  .ruled:not(.ruled--sm) li { font-size: 1.125rem; }
-  .about-hero__meta { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .about-hero { padding-bottom: calc(var(--u) * 6); }
+  .about-hero__bio, .about-hero__actions, .about-hero__facts { grid-column: 1 / -1; grid-row: auto; }
+  .about-hero__actions .cta { flex: 1 1 calc(50% - 0.375rem); justify-content: space-between; gap: 0.4rem; min-height: 3rem; padding: 0.6rem 0.7rem; font-size: 0.875rem; }
   .arow { padding-block: calc(var(--u) * 4) calc(var(--u) * 5); }
   .arow__body { grid-column: 1 / -1; }
-  .arow__groups { grid-template-columns: minmax(0, 1fr); row-gap: 1.5rem; }
-  .ruled--sm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ruled--2 { grid-template-columns: minmax(0, 1fr); }
+  .kit > div { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------- 404 ---------- */

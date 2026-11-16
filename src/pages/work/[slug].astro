@@ -37,7 +37,7 @@ const jsonLd = {
   <article class="case">
     <header class="case__hero">
       <div class="case__side">
-        <dl class="case__meta" data-reveal="fade" data-intro data-delay="0.5">
+        <dl class="case__meta">
           {meta.map((m) => (
             <div><dt>{m.k}</dt><dd>{m.v}</dd></div>
           ))}
@@ -55,7 +55,7 @@ const jsonLd = {
             </dd>
           </div>
         </dl>
-        <p class="case__summary" data-split="lines" data-intro data-delay="0.3">{p.summary}</p>
+        <p class="case__summary">{p.summary}</p>
       </div>
       <div class="case__figure"><ProjectFigure slug={p.slug} /></div>
       <h1 class="case__title rise" style={`--em:${emWidth(p.title)}`}><span><span>{p.title}</span></span></h1>
@@ -65,7 +65,7 @@ const jsonLd = {
       <h2 class="label" id="how-title">How it works</h2>
       <ol class="pipeline">
         {p.pipeline.map((s, i) => (
-          <li class="pipeline__step" style={`--i:${i}`} data-reveal data-delay={String(i * 0.09)}>
+          <li class="pipeline__step" style={`--i:${i}`}>
             <span class="pipeline__label">{s.label}</span>
             <span class="pipeline__note">{s.note}</span>
           </li>
@@ -75,18 +75,18 @@ const jsonLd = {
 
     <section class="pair" aria-labelledby="problem-title" data-waypoint>
       <Waypoint id="problem" label="The problem" deg={135} />
-      <p class="pair__text" data-split="lines" data-aim>{p.context}</p>
+      <p class="pair__text" data-aim>{p.context}</p>
     </section>
     <section class="pair" aria-labelledby="idea-title" data-waypoint>
       <Waypoint id="idea" label="The idea" deg={90} />
-      <p class="pair__text" data-split="lines" data-aim>{p.idea}</p>
+      <p class="pair__text" data-aim>{p.idea}</p>
     </section>
 
     <section class="numbers" aria-labelledby="numbers-title">
       <h2 class="label" id="numbers-title">In numbers</h2>
       <dl class="numbers__list">
         {p.details.map((d) => (
-          <div class="numbers__row" data-reveal>
+          <div class="numbers__row">
             <dt><span class="numbers__stat">{d.stat}</span><span class="numbers__label">{d.label}</span></dt>
             <dd>{d.text}</dd>
           </div>
@@ -97,13 +97,13 @@ const jsonLd = {
     <section class="outcome" aria-labelledby="outcome-title" data-waypoint>
       <Waypoint id="outcome" label="Where it ended up" deg={45} />
       <div class="outcome__body" data-aim>
-        <p class="outcome__text" data-split="lines">{p.outcome}</p>
+        <p class="outcome__text">{p.outcome}</p>
         <p class="outcome__links">
           <a class="link" href={p.repo} rel="noopener" target="_blank">Read the source on GitHub</a>
           {p.live && <a class="link" href={p.live} rel="noopener" target="_blank">Open the live app</a>}
         </p>
         {p.shots?.map((s) => (
-          <figure class="shot" data-reveal>
+          <figure class="shot">
             <a href={s.src.src} data-astro-reload>
               <Image src={s.src} alt={s.alt} widths={[720, 1440]} sizes="(max-width: 767px) 100vw, 58vw" />
             </a>

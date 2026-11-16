@@ -64,7 +64,7 @@ export function setupMotion() {
     enter: (c) => {
       const panel = c.querySelector<HTMLElement>('.curtain__panel')!;
       return gsap.timeline()
-        .add(sweep(panel, [START, END], [START, START], 0.85))
+        .add(sweep(panel, [START, END], [START, START], 0.5))
         .set(c, { autoAlpha: 0 });
     },
   });
