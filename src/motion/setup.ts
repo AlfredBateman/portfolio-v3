@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { ease, neOffset, onPage, onScroll, prefersReducedMotion, setTransition } from '../engine';
 import { heading, kick, startCompass } from './compass';
 import { startFigures } from './figures';
-import { startPeek } from './peek';
 import { startTrueNE } from './true-ne';
 
 // Transitions are a needle swinging over the page: ink fills the wedge between two bearings, pivoting
@@ -39,7 +38,6 @@ function sweep(el: HTMLElement, from: [number, number], to: [number, number], du
 export function setupMotion() {
   startCompass();
   startFigures();
-  startPeek();
   startTrueNE();
 
   // Page transition: an ink band sweeps across carrying the destination's name, set where the next title will sit.

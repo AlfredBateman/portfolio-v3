@@ -31,8 +31,8 @@ import { emWidth } from '../data/fit';
       <ol>
         {projects.map((p) => (
           <li>
-            <a class="strip flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>
-              <span class="strip__name">{p.title} <Arrow /></span>
+            <a class="strip flood" href={`#${p.slug}`} data-attract={p.title}>
+              <span class="strip__name">{p.title} <Arrow down /></span>
               <span class="strip__state">{p.live ? 'Live' : p.status.split(' · ')[0]}</span>
               <span class="strip__tag">{p.tagline}</span>
             </a>
@@ -42,51 +42,56 @@ import { emWidth } from '../data/fit';
     </nav>
   </section>
 
-  <section class="work" id="work" aria-labelledby="work-title" data-waypoint>
+  {/* Each project is a stop on the turn to northeast: 225°, 180°, 135°, 090°, then Contact on 045°. All text is in
+      place from the first paint; the figure of the block at mid-screen runs (src/motion/figures.ts). */}
+  <section class="work" id="work" aria-labelledby="work-title">
     <div class="work__head">
-      <Waypoint id="work" deg={135} />
-      <h2 id="work-title" data-split="chars">Work</h2>
-      <p data-reveal="fade">
-        Four projects, each with its repository. AgentProbe and StockPilot are live, and CanvasLint is still in
-        development. Open any one to see how it works.
+      <h2 id="work-title">Work</h2>
+      <p>
+        Four projects, each with its repository. AgentProbe and StockPilot are live, InvestorLens is released, and
+        CanvasLint is still in development.
       </p>
     </div>
-    <ol class="index">
-      {projects.map((p) => (
+    <ol class="blocks">
+      {projects.map((p, i) => (
         <li>
-          <a class="row flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title} data-peek={p.slug}>
-            <span class="row__title" style={`--em:${emWidth(p.title)}`}>{p.title}</span>
-            <span class="row__summary">{p.summary}</span>
-            <span class="row__kind">{p.kind}</span>
-            <span class="row__year">{p.status}{p.tests > 0 && ` · ${p.tests.toLocaleString('en-US')} tests`}</span>
-            <Arrow />
-          </a>
+          <article class="block" id={p.slug} aria-labelledby={`${p.slug}-name`} data-waypoint data-stop={p.title}>
+            <div class="block__bar">
+              <Waypoint id={p.slug} deg={225 - i * 45} />
+              <p class="block__status">{p.status}</p>
+            </div>
+            <h3 class="block__title" id={`${p.slug}-name`}>
+              <a class="flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title} style={`--em:${emWidth(p.title)}`}>
+                <span>{p.title}</span> <Arrow />
+              </a>
+            </h3>
+            <div class="block__text">
+              <p class="block__summary">{p.summary}</p>
+              <dl class="block__facts">
+                <div><dt>My part</dt><dd>{p.role}</dd></div>
+                <div><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
+                {p.tests > 0 && (
+                  <div>
+                    <dt>Tests</dt>
+                    <dd>
+                      {p.tests.toLocaleString('en-US')}{p.ci ? ', run in ' : ', run locally'}
+                      {p.ci && <a class="link" href={p.ci} rel="noopener" target="_blank">CI ↗</a>}
+                    </dd>
+                  </div>
+                )}
+                {p.now && <div><dt>Works today</dt><dd>{p.now}</dd></div>}
+                {p.next && <div><dt>Next</dt><dd>{p.next}</dd></div>}
+              </dl>
+              <p class="block__links">
+                <a class="cta flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>Case study <Arrow /></a>
+                <a class="cta flood" href={p.repo} rel="noopener" target="_blank" data-attract="GitHub">GitHub <Arrow /></a>
+                {p.live && <a class="cta flood" href={p.live} rel="noopener" target="_blank" data-attract="Live app">Live app <Arrow /></a>}
+              </p>
+            </div>
+            <div class="block__figure"><ProjectFigure slug={p.slug} /></div>
+          </article>
         </li>
       ))}
     </ol>
-    <div class="peek" aria-hidden="true">
-      <div class="peek__card">
-        {projects.map((p) => <div data-peek-for={p.slug} hidden><ProjectFigure slug={p.slug} /></div>)}
-      </div>
-    </div>
-  </section>
-
-  <section class="facts" aria-labelledby="facts-title" data-waypoint>
-    <Waypoint id="facts" deg={90} />
-    <h2 class="facts__title" id="facts-title">So far</h2>
-    <dl class="facts__list">
-      <div data-reveal data-delay="0">
-        <dt>Projects. AgentProbe and StockPilot are live</dt>
-        <dd>4</dd>
-      </div>
-      <div data-reveal data-delay="0.08">
-        <dt>Automated tests, across AgentProbe and StockPilot</dt>
-        <dd>{testsLabel}</dd>
-      </div>
-      <div data-reveal data-delay="0.16">
-        <dt>Graduating. Open to internships now</dt>
-        <dd>2027</dd>
-      </div>
-    </dl>
   </section>
 </Base>

@@ -3,8 +3,9 @@
 //   name   which needle state this is (needles with the same name share their angle across pages)
 //   reach  how far the pointer pulls it, in dial radii (0 = only hovered/focused [data-attract] targets)
 //   mini   the 8-tick header version
-interface Props { name: string; reach?: number; mini?: boolean; class?: string }
-const { name, reach = 0, mini = false, class: cls } = Astro.props;
+//   rest   the bearing it is drawn on before the driver takes over, and under reduced motion (default 045°)
+interface Props { name: string; reach?: number; mini?: boolean; rest?: number; class?: string }
+const { name, reach = 0, mini = false, rest, class: cls } = Astro.props;
 
 const R = 98;
 const ticks = Array.from({ length: mini ? 8 : 72 }, (_, i) => i * (mini ? 45 : 5));
@@ -46,7 +47,7 @@ const w = mini ? 15 : 5.5; // needle half-width
       return <text class="dial__ne" x={p.x} y={p.y} lang="hi">ईशान</text>;
     })()}
   </svg>
-  <div class="needle" data-needle={name} data-reach={reach}>
+  <div class="needle" data-needle={name} data-reach={reach} style={rest === undefined ? undefined : `--rest:${rest}deg`}>
     <svg viewBox="-100 -100 200 200" focusable="false">
       <polygon class="needle__n" points={`0,${mini ? -78 : -86} ${w},0 ${-w},0`} />
       <polygon class="needle__s" points={`0,${mini ? 78 : 86} ${w},0 ${-w},0`} />

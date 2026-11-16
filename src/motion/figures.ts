@@ -3,8 +3,9 @@
 //   stockpilot    a query is typed, and the stages that answer it light up
 //   investorlens  the guards tick one by one before the finding is approved
 //   canvaslint    the scrubber walks the recorded frames and the log follows
-// Case pages: paused off screen; skipped under reduced motion (the static figure is complete).
-// The home work list (peek.ts) starts and stops the same runners on hover, through figure().
+// Case pages: the figure runs while it is on screen. Home: the figure of the project block at the middle of the screen
+// runs, and the others hold their complete last frame, so only one is ever on the clock.
+// Skipped under reduced motion (the static figure is complete).
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { onPage, prefersReducedMotion } from '../engine';
@@ -78,14 +79,14 @@ const kinds: Record<string, [(svg: SVGSVGElement) => Run, number]> = {
   canvaslint: [canvaslint, 8.8],
 };
 
-export type Figure = {
+type Figure = {
   start(): void; // from the first frame, on the ticker (no-op if already running)
   stop(): void; // off the ticker, frame left as is
   end(): void; // the last frame of the loop, static
 };
 
 /** The runner for a [data-live] figure, started and stopped on demand. Starting twice never doubles the ticker work. */
-export function figure(fig: HTMLElement): Figure | undefined {
+function figure(fig: HTMLElement): Figure | undefined {
   const svg = fig.querySelector('svg');
   const kind = kinds[fig.dataset.live!];
   if (!svg || !kind) return;
@@ -112,16 +113,24 @@ export function figure(fig: HTMLElement): Figure | undefined {
 export function startFigures() {
   if (prefersReducedMotion()) return;
   onPage(() => {
-    const el = document.querySelector<HTMLElement>('.case__figure [data-live]');
-    const f = el && figure(el);
-    if (!el || !f) return;
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: 'top bottom',
-      end: 'bottom top',
-      onToggle: (s) => (s.isActive ? f.start() : f.stop()),
-    });
-    if (st.isActive) f.start();
-    return () => { f.stop(); st.kill(); };
+    const running: Figure[] = [];
+    for (const el of document.querySelectorAll<HTMLElement>('[data-live]')) {
+      const f = figure(el);
+      if (!f) continue;
+      running.push(f);
+      const block = el.closest<HTMLElement>('.block'); // home: the same range as the needle's stop
+      const st = ScrollTrigger.create({
+        trigger: block ?? el,
+        start: block ? 'top center' : 'top bottom',
+        end: block ? 'bottom center' : 'bottom top',
+        onToggle: (s) => {
+          if (s.isActive) return f.start();
+          f.stop();
+          if (block) f.end();
+        },
+      });
+      if (st.isActive) f.start();
+    }
+    return () => running.forEach((f) => f.stop());
   });
 }

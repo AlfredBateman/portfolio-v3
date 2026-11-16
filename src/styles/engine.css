@@ -31,7 +31,7 @@ p { text-wrap: pretty; }
 
 /* Accessibility */
 :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 0; }
-#main:focus { outline: none; }
+[tabindex='-1']:focus { outline: none; } /* focus moved by a skip or in-page link: no ring round a whole section */
 .skip-link {
   position: fixed; left: var(--gutter); top: calc(var(--header-h) + 0.5rem); z-index: calc(var(--z-curtain) + 1);
   padding: 0.6em 1em; background: var(--c-fg); color: var(--c-bg);

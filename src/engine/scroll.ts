@@ -22,7 +22,19 @@ export function initScroll() {
     }
     return;
   }
-  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, touchMultiplier: 1.2, anchors: true });
+  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, touchMultiplier: 1.2 });
+  // In-page links glide. Taken in the capture phase and cancelled, so the router's own instant hash jump never runs:
+  // left to race, the two land on the wrong place. Focus follows, as it would on a native jump.
+  document.addEventListener('click', (e) => {
+    const a = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>('a[href^="#"]') : null;
+    const target = a && document.getElementById(a.hash.slice(1));
+    if (!lenis || !a || !target || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    history.replaceState(history.state, '', a.hash);
+    if (!target.hasAttribute('tabindex')) target.tabIndex = -1;
+    target.focus({ preventScroll: true });
+    lenis.scrollTo(target);
+  }, true);
   lenis.on('scroll', (l: Lenis) => {
     state.y = l.scroll;
     state.velocity = l.velocity;

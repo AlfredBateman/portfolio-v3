@@ -16,9 +16,11 @@ export type Project = {
   kind: string;
   role: string;
   stack: string[];
-  status: string;
-  tests: number; // automated tests that CI runs; 0 = none verifiable in CI
-  ci?: string; // the GitHub Actions workflow page that runs them
+  status: string; // "State · detail": the hero strip shows the state alone
+  tests: number; // automated tests counted in the repository (collected, not estimated); 0 = not counted
+  ci?: string; // the GitHub Actions workflow page that runs them, where one does
+  now?: string; // in development: what works today
+  next?: string; // in development: what comes next
   pipeline: Step[]; // the "how it works" figure, read left to right
   context: string;
   idea: string;
@@ -61,7 +63,7 @@ export const projects: Project[] = [
     role: 'Backend, statistics, dashboard and CI',
     stack: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Docker', 'GitHub Actions'],
     status: 'Live on Vercel',
-    tests: 1561, // 1173 pytest + 353 vitest + 49 Playwright, all run by ci.yml
+    tests: 1576, // 1,174 pytest + 353 Vitest + 49 Playwright, as collected by ci.yml on main (e38db98, 10 Nov 2026)
     ci: 'https://github.com/AlfredBateman/AgentProbe/actions/workflows/ci.yml',
     pipeline: [
       { label: 'Test case', note: 'A task for the agent, with the tools it may call' },
@@ -81,7 +83,7 @@ export const projects: Project[] = [
         text: 'Measured in simulation on unchanged flaky agents. The verdict statistics are computed in exact arithmetic.',
       },
       {
-        stat: '1,173',
+        stat: '1,174',
         label: 'pytest tests',
         text: 'Plus 353 web unit tests and 49 Playwright end-to-end specs, with 97% coverage on the core and the API.',
       },
@@ -116,8 +118,8 @@ export const projects: Project[] = [
     kind: 'Team project, full-stack',
     role: 'Team lead, team of three',
     stack: ['React', 'Node.js', 'Express', 'TypeScript', 'MongoDB Atlas', 'Render', 'GitHub Actions'],
-    status: 'v1.2.0, live on Render',
-    tests: 0, // 519 local Vitest cases, but no workflow runs them yet
+    status: 'Live on Render · v1.2.0',
+    tests: 483, // Vitest: 170 web + 313 server, from `vitest list` (66ac528, 20 Oct 2026). No workflow runs them yet
     pipeline: [
       { label: 'Plain English', note: 'Type what you mean, typos included' },
       { label: 'Typo fixing', note: 'Words are corrected before anything parses them' },
@@ -141,7 +143,7 @@ export const projects: Project[] = [
         text: 'An 81-query evaluation harness checks the rule parser against self-authored expectations.',
       },
       {
-        stat: '470+',
+        stat: '483',
         label: 'Vitest unit tests',
         text: 'Plus “why this matched” explanations, and suggestions when a query matches nothing.',
       },
@@ -159,7 +161,7 @@ export const projects: Project[] = [
     kind: 'Full-stack app',
     role: 'Design and build',
     stack: ['Next.js 16', 'TypeScript', 'Prisma', 'SQLite', 'Zod', 'Gemini API'],
-    status: 'v1.0.0',
+    status: 'Released · v1.0.0',
     tests: 0, // no test cases; CI runs lint, typecheck, one assertion script and the build
     pipeline: [
       { label: 'Transcript', note: 'An interview, linked to its study' },
@@ -202,7 +204,9 @@ export const projects: Project[] = [
     role: 'Design and build',
     stack: ['TypeScript', 'React', 'Zustand', 'Vite', 'Chrome Manifest V3'],
     status: 'In development · v1.1.0 on GitHub',
-    tests: 0, // 96 local cases (48 Vitest + 48 Playwright), but no workflow runs them yet
+    tests: 0, // 96 local cases (48 Vitest + 48 Playwright), not counted here: no workflow runs them yet
+    now: 'Records every Canvas 2D call per frame, replays any frame on a scrubbable timeline, shows canvas state after each call, and lints frames against seven rules.',
+    next: 'Nested canvases, gradients, patterns and newer APIs like roundRect, plus state across frames and linting the full history.',
     pipeline: [
       { label: 'Page canvas', note: 'Any page drawing with Canvas 2D' },
       { label: 'Recorder', note: 'Every Canvas 2D call, captured as it happens' },
@@ -231,9 +235,9 @@ export const projects: Project[] = [
   },
 ];
 
-// Automated tests across AgentProbe (1,145 pytest, 184 web unit, 14 Playwright) and StockPilot (470+ Vitest), as on the
-// résumé. Not every one of them runs in CI (see `tests` above), so the label is never worded as a CI count.
-export const testsLabel = '1,800+';
+// The counted tests, summed and rounded down to the hundred: "2,000+". Not every one of them runs in CI (see `tests`
+// above), so the label is never worded as a CI count.
+export const testsLabel = `${(Math.floor(projects.reduce((n, p) => n + p.tests, 0) / 100) * 100).toLocaleString('en-US')}+`;
 
 export const about = {
   education: {
