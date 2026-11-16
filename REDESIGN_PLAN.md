@@ -351,15 +351,15 @@ Each step ends the same way: `npm run build`, `npm run check`, `npm test`, scree
 
 ### Step 2 · Projects
 
-- [ ] Data (`site.ts`): CanvasLint status and copy; a short description per project for the strip; accurate Work intro.
-- [ ] Project blocks replace the index rows: title bar (flood, to the case study), summary, my part, stack, status,
+- [x] Data (`site.ts`): CanvasLint status and copy; a short description per project for the strip; accurate Work intro.
+- [x] Project blocks replace the index rows: title bar (flood, to the case study), summary, my part, stack, status,
       links, figure.
-- [ ] Figures run only for the block at mid-screen; reuse the runners in `motion/figures.ts`.
-- [ ] Delete `motion/peek.ts` and the `.peek` markup and styles.
-- [ ] Each block is a waypoint (225°, 180°, 135°, 090°); the bearing becomes a small figure and the label leads.
-- [ ] Compass: interpolate the header needle's target between waypoints; the readout names the stop.
-- [ ] Remove the "So far" section.
-- [ ] Phone order: title, summary, figure, facts, links. No horizontal overflow at 360 px.
+- [x] Figures run only for the block at mid-screen; reuse the runners in `motion/figures.ts`.
+- [x] Delete `motion/peek.ts` and the `.peek` markup and styles.
+- [x] Each block is a waypoint (225°, 180°, 135°, 090°); the bearing becomes a small figure and the label leads.
+- [x] Compass: interpolate the header needle's target between waypoints; the readout names the stop.
+- [x] Remove the "So far" section.
+- [x] Phone order: title, summary, figure, facts, links. No horizontal overflow at 360 px.
 
 ### Step 3 · Other sections (case studies, About, Contact / footer)
 
@@ -408,14 +408,20 @@ Each step ends the same way: `npm run build`, `npm run check`, `npm test`, scree
 1. **CanvasLint status.** "In development · v1.1.0 on GitHub". The "works today" and "next" lines are drafted from its
    README and wait for my approval before step 2 uses them.
 2. **The résumé PDF.** I export a fresh one; the current file stays until then.
-3. **Test count.** The site says "1,800+", as the résumé does: AgentProbe (1,145 pytest, 184 web unit, 14 Playwright)
-   plus StockPilot (470+ Vitest). It is worded as a count of tests, not of tests run in CI.
+3. **Test count.** Counted from the repositories on 17 Nov 2026, not taken from the résumé. AgentProbe: 1,174 pytest,
+   353 Vitest and 49 Playwright (1,576), as collected by its CI on `main` at `e38db98`. StockPilot: 483 Vitest (170 web,
+   313 server), from `vitest list` at `66ac528`. The hero total is their sum rounded down to the hundred, "2,000+",
+   worded as a count of tests and not of tests run in CI.
 4. **About.** Based in Chandigarh. Open to internships now and to full-time 2027-batch roles (SDE, full-stack, backend),
    remote or on-site in India. The bio is drafted from the résumé for me to edit.
 5. **The internships line.** Dropped.
 6. **Phone header.** `Work · About · GitHub · Résumé`.
 7. **Lenis.** Removed in step 5 if native scroll reads as well.
 
-Step 1 notes: the hero strip links to the case studies until the project blocks exist (step 2). On 16:9 laptops under
+Step 2 notes: in-page links (the hero strip, Work, Contact) glide to their target and move focus there. The pointer
+preview and the "So far" row are gone. The CanvasLint lines are the ones I approved. The waypoint restyle (small
+bearing, label leads) applies to every page already; the rest of the About and case-study work is step 3.
+
+Step 1 notes: on 16:9 laptops under
 750 px tall the name gives up width so the strip stays on the first screen; on phones under about 700 px tall the
 strip's second row sits just below the fold.
