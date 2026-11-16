@@ -302,6 +302,7 @@ or off screen, and none waits for a script, a scroll position or a timeline. Mot
 | Nav labels | Diagonal roll | Hover, focus | CSS | Off |
 | Link underlines | Thicken or draw | Hover, focus | CSS | Instant |
 | Project figures | Run their loop | Block at mid-screen (home); on screen (case study) | One runner at a time | Complete last frame |
+| Bearing tape between projects | Slides 45° under its index, from the last stop's bearing to the next one's | Scroll, scrubbed, while the next block crosses mid-screen: the same range as the header needle's turn | One transform per tape | At rest on the block's bearing |
 | Page transition | Ink wedge on the header needle. The leave runs while the next page loads; the reveal is cut from 0.85 s to 0.5 s or less | Navigation | `clip-path` on one panel | 0.2 s fade |
 | Lock pulse | NE tick and the email arrow, 0.7 s | Arriving at Contact | Two tweens | Off |
 | Header hairline | Fades in | Scroll past 8 px | CSS | Instant |
@@ -421,6 +422,15 @@ Each step ends the same way: `npm run build`, `npm run check`, `npm test`, scree
 Step 2 notes: in-page links (the hero strip, Work, Contact) glide to their target and move focus there. The pointer
 preview and the "So far" row are gone. The CanvasLint lines are the ones I approved. The waypoint restyle (small
 bearing, label leads) applies to every page already; the rest of the About and case-study work is step 3.
+
+Step 2, second pass (17 Nov 2026): every block now reads in one order. Southwest: what it is (one line), the problem
+(one or two sentences), two or three results with numbers, then the links (case study, GitHub, live app, tests in CI).
+Northeast: the figure, the stack as square tags, my part, and for CanvasLint what works today and what is next. Status
+is a square tag in the block's bar; CanvasLint's is printed in ink, "In development". Phones: title, summary, figure,
+problem, results, stack and my part, links. Between two projects a bearing tape (the course, unrolled) slides 45° under
+its index, scrubbed to the scroll and in step with the header needle. Nothing pins and no text moves: section 5 still
+holds. The test counts stay as recounted in decision 3; AgentProbe's README and the résumé PDF still carry the older
+1,145 / 184 / 14.
 
 Step 1 notes: on 16:9 laptops under
 750 px tall the name gives up width so the strip stays on the first screen; on phones under about 700 px tall the
