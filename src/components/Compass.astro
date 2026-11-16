@@ -25,11 +25,12 @@ const w = mini ? 15 : 5.5; // needle half-width
 <div class:list={['compass', { 'compass--mini': mini }, cls]} aria-hidden="true">
   <svg class="dial" viewBox="-100 -100 200 200" focusable="false">
     <circle class="dial__ring" r={R} />
-    {ticks.map((d) => (
+    {ticks.map((d, i) => (
       <line
         class:list={['dial__tick', { 'is-major': d % 45 === 0, 'is-ne': d === 45 }]}
         x1="0" y1={-R} x2="0" y2={-R + tickLen(d)}
         transform={`rotate(${d})`}
+        style={mini ? undefined : `--i:${i}`}
       />
     ))}
     {!mini && cardinals.map(({ d, t }) => {

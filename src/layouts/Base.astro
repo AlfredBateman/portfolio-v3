@@ -2,7 +2,6 @@
 import { ClientRouter } from 'astro:transitions';
 import { href, site } from '../data/site';
 import archivoUrl from '../fonts/archivo-100_900-normal.woff2?url';
-import Loader from '../components/Loader.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/tokens.css';
@@ -15,9 +14,8 @@ interface Props {
   image?: string;
   current?: 'home' | 'work' | 'about';
   lost?: boolean; // the 404: the compass has nothing to point at
-  loader?: boolean; // the first-visit loader (home only)
 }
-const { title, description = site.description, image = 'og.png', current, lost = false, loader = false } = Astro.props;
+const { title, description = site.description, image = 'og.png', current, lost = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL(href(image), Astro.site ?? site.url).href;
@@ -64,7 +62,6 @@ const jsonLd = {
     <script is:inline>
       document.documentElement.classList.add('js');
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
-      try { if (sessionStorage.getItem('loader-seen')) document.documentElement.classList.add('loader-seen'); } catch {}
     </script>
     <ClientRouter fallback="swap" />
   </head>
@@ -73,7 +70,6 @@ const jsonLd = {
     <div id="curtain" transition:persist="curtain" aria-hidden="true">
       <div class="curtain__panel"><p class="curtain__label" data-curtain-label></p></div>
     </div>
-    {loader && <Loader />}
     <Header current={current} lost={lost} />
     <main id="main" tabindex="-1">
       <slot />

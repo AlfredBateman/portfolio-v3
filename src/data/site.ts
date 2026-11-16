@@ -12,6 +12,7 @@ export type Project = {
   slug: string;
   title: string;
   summary: string; // one sentence: what it is, for whom
+  tagline: string; // a few words, for the hero strip
   kind: string;
   role: string;
   stack: string[];
@@ -39,10 +40,11 @@ export const site = {
   role: 'Software engineer, backend and full-stack',
   url: 'https://alfredbateman.github.io/portfolio-v3',
   get description() {
-    return `Ishan Sharma is a final-year computer science student who builds and tests backend and full-stack software: four shipped projects, ${testsLabel} automated tests run in CI.`;
+    return `Ishan Sharma is a final-year computer science student who builds and tests backend and full-stack software: four projects, two of them live, ${testsLabel} automated tests.`;
   },
   email: 'ishan.sh.1148@gmail.com',
   resume: 'ishan-sharma-resume.pdf',
+  github: 'https://github.com/AlfredBateman',
   socials: [
     { label: 'GitHub', href: 'https://github.com/AlfredBateman' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ishansharma1247' },
@@ -53,6 +55,7 @@ export const projects: Project[] = [
   {
     slug: 'agentprobe',
     title: 'AgentProbe',
+    tagline: 'LLM agent testing',
     summary: 'Regression testing for LLM agents: run each case again and again, judge the whole trace, and fail the build only when the change is real.',
     kind: 'Full-stack platform',
     role: 'Backend, statistics, dashboard and CI',
@@ -108,6 +111,7 @@ export const projects: Project[] = [
   {
     slug: 'stockpilot',
     title: 'StockPilot',
+    tagline: 'Plain-English screener',
     summary: 'A screener for about 100 NIFTY stocks that understands plain English, and keeps working when the network does not.',
     kind: 'Team project, full-stack',
     role: 'Team lead, team of three',
@@ -150,6 +154,7 @@ export const projects: Project[] = [
   {
     slug: 'investorlens',
     title: 'InvestorLens',
+    tagline: 'UX research workspace',
     summary: 'A UX research workspace that links interviews to findings, personas and journey maps, with AI transcript analysis that has to show its quotes.',
     kind: 'Full-stack app',
     role: 'Design and build',
@@ -191,11 +196,12 @@ export const projects: Project[] = [
   {
     slug: 'canvaslint',
     title: 'CanvasLint',
+    tagline: 'Canvas 2D debugger',
     summary: 'A Chrome DevTools extension that records every Canvas 2D call, replays it on a timeline, and lints it.',
     kind: 'Browser extension',
     role: 'Design and build',
     stack: ['TypeScript', 'React', 'Zustand', 'Vite', 'Chrome Manifest V3'],
-    status: 'v1.1.0',
+    status: 'In development · v1.1.0 on GitHub',
     tests: 0, // 96 local cases (48 Vitest + 48 Playwright), but no workflow runs them yet
     pipeline: [
       { label: 'Page canvas', note: 'Any page drawing with Canvas 2D' },
@@ -220,13 +226,14 @@ export const projects: Project[] = [
         text: 'A lint engine and a state inspector sit beside the timeline, and recordings can be exported and imported.',
       },
     ],
-    outcome: 'Shipped as v1.1.0 on Manifest V3, with an end-to-end privacy test.',
+    outcome: 'Still in development. Version 1.1.0 is on GitHub, built on Manifest V3, with an end-to-end privacy test.',
     repo: 'https://github.com/AlfredBateman/CanvasLint',
   },
 ];
 
-// Sum of CI-verified tests, rounded down to the hundred, e.g. "1,500+".
-export const testsLabel = `${(Math.floor(projects.reduce((n, p) => n + p.tests, 0) / 100) * 100).toLocaleString('en-US')}+`;
+// Automated tests across AgentProbe (1,145 pytest, 184 web unit, 14 Playwright) and StockPilot (470+ Vitest), as on the
+// résumé. Not every one of them runs in CI (see `tests` above), so the label is never worded as a CI count.
+export const testsLabel = '1,800+';
 
 export const about = {
   education: {

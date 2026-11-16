@@ -33,7 +33,7 @@ p { text-wrap: pretty; }
 :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 0; }
 #main:focus { outline: none; }
 .skip-link {
-  position: fixed; left: var(--gutter); top: calc(var(--header-h) + 0.5rem); z-index: calc(var(--z-loader) + 1);
+  position: fixed; left: var(--gutter); top: calc(var(--header-h) + 0.5rem); z-index: calc(var(--z-curtain) + 1);
   padding: 0.6em 1em; background: var(--c-fg); color: var(--c-bg);
   transform: translateY(-100vh);
 }
@@ -60,15 +60,6 @@ html.lenis, html.lenis body { height: auto; }
 /* Curtain (page transitions) */
 #curtain { position: fixed; inset: 0; z-index: var(--z-curtain); pointer-events: none; visibility: hidden; overflow: hidden; }
 .curtain__panel { position: absolute; inset: 0; background: var(--c-curtain); }
-
-/* Loader skeleton */
-#loader {
-  position: fixed; inset: 0; z-index: var(--z-loader);
-  display: grid; align-content: end; padding: var(--gutter);
-  background: var(--c-fg); color: var(--c-bg);
-}
-html:not(.js) #loader, html.loader-seen #loader, #loader[hidden] { display: none; }
-@media (max-width: 767px) { #loader { display: none; } } /* phones go straight to the hero */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }

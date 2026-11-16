@@ -1,6 +1,6 @@
-// Global motion: runs once on the client, before the first page initializes.
+// Global motion: runs once on the client, before the first page initializes. There is no loader: the page paints complete.
 import { gsap } from 'gsap';
-import { ease, neOffset, onPage, onScroll, prefersReducedMotion, setLoaderExit, setLoaderFormat, setTransition } from '../engine';
+import { ease, neOffset, onPage, onScroll, prefersReducedMotion, setTransition } from '../engine';
 import { heading, kick, startCompass } from './compass';
 import { startFigures } from './figures';
 import { startPeek } from './peek';
@@ -41,14 +41,6 @@ export function setupMotion() {
   startFigures();
   startPeek();
   startTrueNE();
-
-  // Loader: the counter is a bearing, 000° to 045°.
-  setLoaderFormat((p) => `${String(Math.round(p * 0.45)).padStart(3, '0')}°`);
-  setLoaderExit((root) =>
-    gsap.timeline()
-      .to(root.querySelectorAll('[data-loader-out]'), { x: (_: number, el: Element) => neOffset(el), y: (_: number, el: Element) => -neOffset(el), duration: 0.3, ease: ease.inOut, stagger: 0.03 })
-      .add(sweep(root, [START, END], [START, START], 0.6), '-=0.15'),
-  );
 
   // Page transition: an ink band sweeps across carrying the destination's name, set where the next title will sit.
   let dest = '';

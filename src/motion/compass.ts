@@ -1,5 +1,6 @@
 // The driver: one magnetic field, every needle on the site.
-// Each needle is a damped spring that wants to point northeast (045°). It is pulled toward:
+// Each needle is a damped spring that wants to point northeast (045°). A press on the hero dial flicks its needle round.
+// It is pulled toward:
 //   1. a hovered or focused [data-attract] element (all needles on screen point at it; on touch,
 //      the project row nearest the middle of the screen), else
 //   2. its waypoint's [data-aim] text while that text is on screen (inner pages: the needle turns
@@ -23,6 +24,7 @@ const HOME = 45;
 const K = 70; // stiffness
 const C = 8.5; // damping (about 0.5 of critical: one clear overshoot, then settle)
 const MAX_VEL = 900; // deg/s
+const FLICK = 4200; // deg/s: enough to carry a flicked needle past the far side, so it goes round once and settles
 const JOLT = 0.035; // deg/s of needle spin per px/s change in scroll speed
 const JOLT_SPEED = 8000; // px/s: scroll speed is clamped here, which bounds the biggest jolt (a flick)
 const JOLT_SMOOTH = 10; // 1/s: low-pass on the measured speed, so frame jitter in a steady scroll does not jolt
@@ -35,6 +37,7 @@ const states = new Map<string, State>();
 let needles: Needle[] = [];
 let readouts: Readout[] = [];
 let held = true; // first load: point north until the intro releases the needle
+let flicked: State | null = null; // the needle just flicked: it may spin past MAX_VEL until it slows back under it
 let ishan: SVGTextElement | null = null; // the hero's ईशान, hidden until the released needle first crosses 045
 let lost = false;
 let pointer: { x: number; y: number } | null = null;
@@ -79,6 +82,19 @@ function showIshan() {
   const { width, height } = t.getBBox();
   const wedge = (s: number) => `polygon(0px 100%, 0px calc(100% - ${s}px), ${s}px 100%)`;
   gsap.fromTo(t, { clipPath: wedge(0) }, { clipPath: wedge(width + height), duration: 0.6, ease: ease.out, clearProps: 'clipPath' });
+  // The NE tick answers the needle's arrival, once.
+  gsap.from('.hero__compass .dial__tick.is-ne', { strokeWidth: 7, duration: 0.7, ease: ease.soft, autoRound: false, clearProps: 'strokeWidth' });
+}
+
+/** Flick: a press on the hero dial sends its needle round, toward the side that was pressed; the other needles feel it. */
+function flick(e: PointerEvent) {
+  const n = needles.find((n) => n.el.dataset.needle === 'hero');
+  if (!n || held) return;
+  const r = n.el.getBoundingClientRect();
+  const dir = Math.sign(diff(n.s.angle, bearing(e.clientX - r.left - r.width / 2, e.clientY - r.top - r.height / 2))) || 1;
+  kick(dir * 500);
+  n.s.vel = dir * FLICK;
+  flicked = n.s;
 }
 
 /** Jolt every needle (page transitions). */
@@ -125,7 +141,9 @@ function tick(time: number, deltaMs: number) {
     n.s.vel += jolt;
     const toHome = diff(n.s.angle, HOME);
     const acc = K * diff(n.s.angle, target) - C * n.s.vel;
-    n.s.vel = gsap.utils.clamp(-MAX_VEL, MAX_VEL, n.s.vel + acc * dt);
+    const cap = n.s === flicked ? FLICK : MAX_VEL;
+    n.s.vel = gsap.utils.clamp(-cap, cap, n.s.vel + acc * dt);
+    if (n.s === flicked && Math.abs(n.s.vel) < MAX_VEL) flicked = null;
     n.s.angle += n.s.vel * dt;
     if (ishan && toHome > 0 && toHome < 90 && diff(n.s.angle, HOME) <= 0 && n.el.dataset.needle === 'hero') showIshan();
     if (Math.abs(n.s.angle) > 7200) n.s.angle = norm(n.s.angle);
@@ -236,10 +254,10 @@ export function startCompass() {
         },
       });
     }
-    // The dial draws itself around the ring, then the needle is let go and swings to the northeast.
-    const ticks = document.querySelectorAll('.compass:not(.compass--mini) .dial__tick');
-    if (ticks.length) intro.from(ticks, { autoAlpha: 0, duration: 0.3, stagger: 0.008, ease: 'none' }, 0);
+    // The dial draws itself round the ring in CSS, from the first paint (site.css); here the needle is let go and swings
+    // to the northeast.
     if (held) intro.add(() => { held = false; }, 0.25);
+    document.querySelector<HTMLElement>('.hero__compass .compass')?.addEventListener('pointerdown', flick);
     // ईशान: on the first intro it waits for the needle (about 0.3 s after release); otherwise it is already there.
     ishan = held ? document.querySelector<SVGTextElement>('.hero__compass .dial__ne') : null;
     if (ishan) intro.add(showIshan, 1.5); // a pointer pulled the needle away and it never crossed: show it anyway

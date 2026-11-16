@@ -7,28 +7,39 @@ import ProjectFigure from '../components/ProjectFigure.astro';
 import { href, projects, site, testsLabel } from '../data/site';
 import { emWidth } from '../data/fit';
 ---
-<Base current="home" loader>
+<Base current="home">
+  {/* Everything in the hero is in the first paint. Only the dial performs (src/motion/compass.ts). */}
   <section class="hero" aria-labelledby="hero-title">
-    <p class="hero__intro rise-block">
-      Final-year computer science student. I build backends and full-stack apps, and I write the tests:
-      {testsLabel} run in CI. Looking for my first role as a software engineer.
-    </p>
+    <div class="hero__lead">
+      <h1 class="hero__who" id="hero-title">{site.name} <span>{site.role}</span></h1>
+      <p class="hero__intro">
+        I build backends and full-stack apps, and I write the tests: {testsLabel} across AgentProbe and StockPilot.
+        Final-year computer science at Chitkara University, open to internships now and full-time roles from 2027.
+      </p>
+      <div class="hero__actions">
+        <a class="cta cta--primary flood" href={href(site.resume)} download data-attract="Résumé">Résumé (PDF) <Arrow down /></a>
+        <a class="cta flood" href={site.github} rel="me noopener" target="_blank" data-attract="GitHub">GitHub <Arrow /></a>
+        <a class="cta flood" href={`mailto:${site.email}`} data-attract="Email">Email <Arrow /></a>
+      </div>
+    </div>
     <div class="hero__compass">
       <Compass name="hero" reach={2.4} />
       <button class="utility hero__true" type="button" data-true-ne aria-pressed="false" hidden>Point to real NE ↗</button>
     </div>
-    <h1 class="hero__name rise" id="hero-title" style={`--em:${emWidth(site.short)}`}><span aria-hidden="true"><span>{site.short}</span></span><span class="sr-only">{site.name}, software engineer</span></h1>
-    <div class="hero__foot">
-      <p data-reveal="fade" data-intro data-delay="0.8">{site.name}. B.E. Computer Science Engineering, Chitkara University, 2027</p>
-      <div class="hero__actions" data-reveal="fade" data-intro data-delay="0.9">
-        <a class="cta cta--quiet flood" href={href(site.resume)} download data-attract="Résumé">
-          Résumé (PDF) <Arrow down />
-        </a>
-        <a class="cta flood" href="#work" data-attract="Work">
-          See the work <Arrow />
-        </a>
-      </div>
-    </div>
+    <p class="hero__name" aria-hidden="true" style={`--em:${emWidth(site.short)}`}><span>{site.short}</span></p>
+    <nav class="hero__strip" aria-label="Projects">
+      <ol>
+        {projects.map((p) => (
+          <li>
+            <a class="strip flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>
+              <span class="strip__name">{p.title} <Arrow /></span>
+              <span class="strip__state">{p.live ? 'Live' : p.status.split(' · ')[0]}</span>
+              <span class="strip__tag">{p.tagline}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   </section>
 
   <section class="work" id="work" aria-labelledby="work-title" data-waypoint>
@@ -36,7 +47,8 @@ import { emWidth } from '../data/fit';
       <Waypoint id="work" deg={135} />
       <h2 id="work-title" data-split="chars">Work</h2>
       <p data-reveal="fade">
-        Four projects, each with its repository and its tests. Two of them are live; open any one to see how it works.
+        Four projects, each with its repository. AgentProbe and StockPilot are live, and CanvasLint is still in
+        development. Open any one to see how it works.
       </p>
     </div>
     <ol class="index">
@@ -64,16 +76,16 @@ import { emWidth } from '../data/fit';
     <h2 class="facts__title" id="facts-title">So far</h2>
     <dl class="facts__list">
       <div data-reveal data-delay="0">
-        <dt>Full-stack projects, built and deployed</dt>
+        <dt>Projects. AgentProbe and StockPilot are live</dt>
         <dd>4</dd>
       </div>
       <div data-reveal data-delay="0.08">
-        <dt>Automated tests, run in CI</dt>
+        <dt>Automated tests, across AgentProbe and StockPilot</dt>
         <dd>{testsLabel}</dd>
       </div>
       <div data-reveal data-delay="0.16">
-        <dt>Internships. This site is part of fixing that</dt>
-        <dd>0</dd>
+        <dt>Graduating. Open to internships now</dt>
+        <dd>2027</dd>
       </div>
     </dl>
   </section>
