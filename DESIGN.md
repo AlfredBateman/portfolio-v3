@@ -119,8 +119,10 @@ Also rejected the "up and to the right growth chart" reading of northeast: the d
 **Explainer figure:** each case study has one "how it works" pipeline figure (inline, from data). The `anatomy` skill is not
 installed; the figures are built by hand.
 
-**Theatre:** a first-visit loader (ink field, bearing counter 000° → 045°), no WebGL. Timed from navigation start; if the
-script boots after 1.2 s (slow phone) it skips the count and only sweeps away, so it never exceeds 2.6 s.
+**Theatre:** none. No loader and no WebGL. The hero paints complete (name, role, intro, résumé, GitHub, email and the
+four projects), and its dial is the opening: the ticks draw round the ring, the needle is let go from north, swings to
+045°, overshoots once and settles, and ईशान wipes on. No text waits for any of it. A press on the hero dial flicks the
+needle round once.
 
 ## Northeast rules
 

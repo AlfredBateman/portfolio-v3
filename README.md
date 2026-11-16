@@ -8,7 +8,7 @@ software engineer role (backend / full-stack).
 **Live:** https://alfredbateman.github.io/portfolio-v3/
 
 The site is built around a compass: a damped needle that rests at 045° (northeast), turns toward whatever you point at
-or tab to, sweeps across the screen between pages, and spins lost on the 404. It covers four projects (AgentProbe,
+or tab to, spins when you flick the dial, sweeps across the screen between pages, and wanders lost on the 404. It covers four projects (AgentProbe,
 StockPilot, InvestorLens and CanvasLint), each with a live diagram of how it works, and a downloadable résumé.
 
 ## Stack
@@ -59,10 +59,10 @@ Using a custom domain later? In `astro.config.mjs`, set `site` to the domain and
 ```
 src/data/site.ts          all content
 src/pages/                home, about, work/[slug], 404
-src/components/           compass, header, footer, loader, project figures, waypoints
+src/components/           compass, header, footer, project figures, waypoints
 src/motion/compass.ts     the needle: one spring-driven driver for every compass on the site
 src/motion/figures.ts     the live project diagrams
-src/motion/setup.ts       loader, page transition (the needle sweep)
-src/engine/               scroll, reveals, loader and page lifecycle
+src/motion/setup.ts       page transition (the needle sweep)
+src/engine/               scroll, reveals and page lifecycle
 DESIGN.md                 concept, art direction and the decisions behind them
 ```

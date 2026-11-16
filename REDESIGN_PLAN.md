@@ -170,8 +170,9 @@ hero dial and the needle spins, the readout races, and it settles back on 045°;
 ```
 Ishan Sharma · Software engineer, backend and full-stack                 ( DIAL )
 I build backends and full-stack apps, and I write the tests:               needle on NE
-1,500+ run in CI. Final-year CS at Chitkara University,                    ईशान at the NE mark
-graduating August 2027, looking for my first engineering role.
+1,800+ across AgentProbe and StockPilot. Final-year computer               ईशान at the NE mark
+science at Chitkara University, open to internships now and
+full-time roles from 2027.
 [ Résumé (PDF) ↓ ]  [ GitHub ↗ ]  [ Email ↗ ]
 
 I S H A N   (full width, as now)
@@ -336,16 +337,16 @@ Each step ends the same way: `npm run build`, `npm run check`, `npm test`, scree
 
 ### Step 1 · Hero (and the header, which is part of the first screen)
 
-- [ ] Remove the loader: `Loader.astro`, `engine/loader.ts`, its hooks in `engine/index.ts` and `motion/setup.ts`, the
+- [x] Remove the loader: `Loader.astro`, `engine/loader.ts`, its hooks in `engine/index.ts` and `motion/setup.ts`, the
       `loader-seen` flag and the loader CSS.
-- [ ] Hero text in the first paint: drop `rise-block`, `data-reveal` and `data-intro` from the intro, foot and actions.
-- [ ] Name and role line; rewrite the intro (fixes the "tests:1,500+" defect).
-- [ ] Actions: Résumé (primary), GitHub, Email. Remove "See the work".
-- [ ] Project strip: four targets with a short description and status, from `site.ts`.
-- [ ] `ISHAN`: keep the width unfold, remove the mask and offset.
-- [ ] Header: full name from 768 px, GitHub and Résumé in the nav, phone layout without the readout.
-- [ ] Compass: hero targets carry `data-attract`; add the flick.
-- [ ] Verify the five-second test: at 1.0 s after navigation, name, role, four project names, GitHub and Résumé are
+- [x] Hero text in the first paint: drop `rise-block`, `data-reveal` and `data-intro` from the intro, foot and actions.
+- [x] Name and role line; rewrite the intro (fixes the "tests:1,500+" defect).
+- [x] Actions: Résumé (primary), GitHub, Email. Remove "See the work".
+- [x] Project strip: four targets with a short description and status, from `site.ts`.
+- [x] `ISHAN`: keep the width unfold, remove the mask and offset.
+- [x] Header: full name from 768 px, GitHub and Résumé in the nav, phone layout without the readout.
+- [x] Compass: hero targets carry `data-attract`; add the flick.
+- [x] Verify the five-second test: at 1.0 s after navigation, name, role, four project names, GitHub and Résumé are
       visible in the first screen at 1366×768, 1440×900 and 390×844.
 
 ### Step 2 · Projects
@@ -402,16 +403,19 @@ Each step ends the same way: `npm run build`, `npm run check`, `npm test`, scree
 
 ---
 
-## Open questions
+## Decisions (16 Nov 2026)
 
-These need an answer from me before the step that uses them. The default applies if I say nothing.
+1. **CanvasLint status.** "In development · v1.1.0 on GitHub". The "works today" and "next" lines are drafted from its
+   README and wait for my approval before step 2 uses them.
+2. **The résumé PDF.** I export a fresh one; the current file stays until then.
+3. **Test count.** The site says "1,800+", as the résumé does: AgentProbe (1,145 pytest, 184 web unit, 14 Playwright)
+   plus StockPilot (470+ Vitest). It is worded as a count of tests, not of tests run in CI.
+4. **About.** Based in Chandigarh. Open to internships now and to full-time 2027-batch roles (SDE, full-stack, backend),
+   remote or on-site in India. The bio is drafted from the résumé for me to edit.
+5. **The internships line.** Dropped.
+6. **Phone header.** `Work · About · GitHub · Résumé`.
+7. **Lenis.** Removed in step 5 if native scroll reads as well.
 
-1. **CanvasLint status (step 2).** The résumé says "released v1.1.0"; it is still in development. Default wording:
-   "In development · v1.1.0 on GitHub", with one line for what works and one for what is next (I need to supply both).
-2. **The résumé PDF (step 4).** It needs a fresh export: four projects or an explicit three, current test counts,
-   "1,500+". The site only serves the file; I replace `public/ishan-sharma-resume.pdf`.
-3. **About copy (step 3).** Three or four sentences of bio, where I am based, and availability (internship now,
-   full-time from August 2027?). Default: drafted from the résumé for me to edit.
-4. **The internships line (step 3).** Default: keep it as one sentence in About.
-5. **Phone header (step 1).** Default: `Work · About · GitHub · Résumé`, Contact via the hero and footer.
-6. **Lenis (step 5).** Default: remove if the native-scroll version reads as well.
+Step 1 notes: the hero strip links to the case studies until the project blocks exist (step 2). On 16:9 laptops under
+750 px tall the name gives up width so the strip stays on the first screen; on phones under about 700 px tall the
+strip's second row sits just below the fold.
