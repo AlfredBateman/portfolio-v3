@@ -79,7 +79,8 @@ the destination's name; the needle gets a kick and resettles on the new page.
 **Idle state:** the needle never fully freezes. A slow two-sine sway of about 1° (a real needle trembles) runs on the GSAP
 ticker; the readout digits follow. Off under reduced motion (needle fixed at 045°).
 Every section label is a waypoint, a small compass whose needle turns toward the text beside it, with a fixed bearing
-that steps 45° per section toward NE: home runs Work 135°, So far 090°, Contact 045° (the hero needs none, it shows the
+that steps 45° per section toward NE: on the home page the projects are the stops, AgentProbe 225°, StockPilot 180°,
+InvestorLens 135°, CanvasLint 090°, then Contact 045° (the hero needs none, it shows the
 destination); About and the case studies run their own sequences, and every page ends on the Contact waypoint at 045°.
 The header needle rests on the bearing of the waypoint section in view and the readout names its compass point; a
 hovered or focused target still wins. Scrolling jolts the needles only when its speed changes (start, stop, flick):
@@ -130,7 +131,12 @@ needle round once.
   nudges and exits leave to the northeast. No other direction of travel.
 - **Red means northeast.** `--c-accent` appears only on the needle's north half, ईशान, the NE tick and the lock pulse.
   The only other uses are focus rings and data alerts (the AgentProbe regression, CanvasLint's warnings).
-- **Bearings step toward 045°.** Home: Work 135° → So far 090° → Contact 045°, locked. About: starts at 270° and ends at 045°.
+- **One turn to northeast.** Every page is one turn of the header needle. Each waypoint section is a stop with a bearing:
+  while a stop fills the middle of the screen the needle holds its bearing and the readout names it, and between two
+  stops the needle turns from one to the next with the scroll. Home: 225° → 180° → 135° → 090° → Contact 045°, locked
+  (from the hero's 045° that is one full turn, counter-clockwise). About: starts at 270° and ends at 045°. The stop at
+  mid-screen answers: its title widens east and its figure runs; the other figures hold their last frame.
+- **A waypoint's needle is drawn on its own bearing**, so the turn reads without a script and under reduced motion.
   Every page ends on the Contact waypoint at 045°.
 - **Scroll wobble.** The needles jolt only when scroll speed changes (start, stop, flick); steady scrolling leaves them true.
   Once the Contact footer passes 40% of the screen they lock at contact: the sway and the jolts stop and the readout says
