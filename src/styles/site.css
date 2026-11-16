@@ -422,7 +422,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 }
 /* The stop (dial and bearing) and where the project stands. */
 .block__bar { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: var(--gutter); padding-block: 0.9rem 0.4rem; }
-.block__status { font-size: var(--t-xs); font-weight: 600; text-align: right; }
+.block__status { display: flex; align-items: center; gap: 0.5rem; font-size: var(--t-xs); font-weight: 600; white-space: nowrap; }
 /* The title is the way into the case study: the whole bar floods. */
 .block__title { grid-column: 1 / -1; }
 .block__title a {
@@ -454,35 +454,75 @@ html.is-scrolled .header { border-color: var(--c-line); }
   .block__title a:hover span { font-stretch: 125%; }
 }
 
-.block__text { grid-column: 1 / span 6; display: grid; gap: calc(var(--u) * 2); align-content: start; justify-items: start; padding-top: calc(var(--u) * 2); }
+/* Square labels: the stack, and where a project stands. Not buttons, so the border is quiet. */
+.tag { display: inline-block; padding: 0.25rem 0.55rem; border: 1px solid var(--c-quiet); font-size: var(--t-xs); font-weight: 600; line-height: 1.3; white-space: nowrap; }
+.tag--ink { border-color: var(--c-fg); background: var(--c-fg); color: var(--c-bg); }
+.tags { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; padding: 0; }
+.block__status .tag { border-color: var(--c-fg); }
+
+/* Southwest: what it is, the problem, results with numbers, links. */
+.block__text { grid-column: 1 / span 6; display: grid; gap: calc(var(--u) * 2.5); align-content: start; justify-items: start; padding-top: calc(var(--u) * 2); }
 .block__summary { max-width: 34ch; font-size: var(--t-m); line-height: 1.3; letter-spacing: -0.01em; }
-.block__facts { display: grid; gap: 0.7rem; width: 100%; max-width: 38rem; font-size: var(--t-s); }
-.block__facts div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 1rem; padding-top: 0.7rem; border-top: 1px solid var(--c-line); }
-.block__facts dt { font-size: var(--t-xs); font-weight: 600; color: var(--c-muted); padding-top: 0.1em; }
+.block__problem, .block__proof { display: grid; gap: 0.6rem; width: 100%; max-width: 40rem; }
+.block__problem p { max-width: 36rem; }
+.block__results { list-style: none; padding: 0; }
+.block__results li { display: grid; grid-template-columns: calc(var(--t-m) * 8.75) minmax(0, 1fr); column-gap: 1rem; align-items: baseline; padding-block: 0.85rem; border-top: 1px solid var(--c-line); }
+.block__results li:first-child { border-top-color: var(--c-fg); }
+.block__stat { font-size: var(--t-m); font-weight: 800; font-stretch: 125%; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.block__results p { font-size: var(--t-s); color: var(--c-muted); }
+.block__results b { font-weight: 600; color: var(--c-fg); }
 .block__links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .block__links .cta { min-height: 2.875rem; padding-block: 0.6rem; }
-.block__figure { grid-column: 8 / -1; padding-top: calc(var(--u) * 2); }
+/* Northeast: the figure, then the stack and my part. */
+.block__side { grid-column: 8 / -1; display: grid; gap: calc(var(--u) * 2.5); align-content: start; padding-top: calc(var(--u) * 2); }
+.block__facts { display: grid; gap: 0.7rem; font-size: var(--t-s); }
+.block__facts div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 1rem; padding-top: 0.7rem; border-top: 1px solid var(--c-line); }
+.block__facts dt { font-size: var(--t-xs); font-weight: 600; color: var(--c-muted); padding-top: 0.3em; }
 .block .pfig { animation: none; } /* in place from the first paint */
 .block .pfig svg { width: 100%; max-height: none; }
 
+/* Between two projects: the course, unrolled. One tick is 5° (4.6vw, so the stop before is always just off the east edge), a long one 15°, and
+   every 45° is a stop. The tape rests
+   with this block's bearing under the index (the long line, on the figure's hang line); with motion on it slides there
+   from the last stop's bearing as the block crosses the middle of the screen, in step with the header needle
+   (src/motion/setup.ts). Offsets use left, never transform: the script owns the tape's transform. */
+.leg { --t: 4.6vw; grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; height: 2.75rem; overflow: clip; font-size: var(--t-xs); font-variant-numeric: tabular-nums; color: var(--c-muted); }
+.leg__origin { grid-column: 8 / -1; position: relative; }
+.leg__tape {
+  position: absolute;
+  inset-block: 0;
+  left: calc(var(--t) * -15);
+  width: calc(var(--t) * 33); /* covers the block's width at both ends of its 9-tick (45°) travel */
+  background:
+    linear-gradient(90deg, var(--c-fg) 1px, transparent 0) 0 0 / calc(var(--t) * 3) 0.8rem repeat-x,
+    linear-gradient(90deg, var(--c-fg) 1px, transparent 0) 0 0 / var(--t) 0.4rem repeat-x;
+}
+.leg__tape span { position: absolute; top: 1.1rem; left: calc(var(--t) * (15 + var(--m) * 9)); padding-left: 0.45rem; white-space: nowrap; }
+.leg__tape .is-stop { font-weight: 600; color: var(--c-fg); }
+.leg__index { position: absolute; inset-block: 0; left: 0; width: 2px; background: var(--c-fg); }
+
 @media (max-width: 1023px) {
   .block__text { grid-column: 1 / span 7; }
-  .block__figure { grid-column: 8 / -1; }
-  .block__facts div { grid-template-columns: minmax(0, 1fr); row-gap: 0.15rem; }
+  .block__results li { grid-template-columns: minmax(0, 1fr); row-gap: 0.35rem; }
+  .block__facts div { grid-template-columns: minmax(0, 1fr); row-gap: 0.3rem; }
 }
-/* Phones: title, summary, figure, facts, links. */
+/* Phones: title, summary, figure, the problem, results, stack and my part, links. The links are last in the source
+   too, so the tab order still follows the screen. */
 @media (max-width: 767px) {
   .work__head h2, .work__head p { grid-column: 1 / -1; }
   .work__head p { margin-top: 1.25rem; }
   .block { padding-bottom: calc(var(--u) * 7); }
   .block__title a { font-size: min(4.5rem, calc(88cqi / var(--em, 6))); padding-block: 0.75rem; }
-  .block__text { display: contents; }
-  .block__summary, .block__figure, .block__facts, .block__links { grid-column: 1 / -1; }
-  .block__summary { grid-row: 3; padding-top: 1rem; font-size: 1.1875rem; }
-  .block__figure { grid-row: 4; padding-top: 1.5rem; }
-  .block__facts { grid-row: 5; margin-top: 1.5rem; }
+  .block__text, .block__side { display: contents; }
+  .block__summary, .block__figure, .block__problem, .block__proof, .block__facts, .block__links { grid-column: 1 / -1; margin-top: 1.5rem; }
+  .block__summary { order: 1; margin-top: 1rem; font-size: 1.1875rem; }
+  .block__figure { order: 2; }
+  .block__problem { order: 3; }
+  .block__proof { order: 4; }
+  .block__facts { order: 5; }
   .block__facts div { grid-template-columns: 5.5rem minmax(0, 1fr); }
-  .block__links { grid-row: 6; margin-top: 1.25rem; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0.5rem; width: 100%; }
+  .block__links { order: 6; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; width: 100%; }
+  .block__links:has(> :nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .block__links .cta { justify-content: space-between; gap: 0.4rem; padding-inline: 0.7rem; font-size: 0.875rem; }
 }
 

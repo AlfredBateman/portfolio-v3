@@ -74,6 +74,16 @@ export function setupMotion() {
     onPage(() => {
       const title = document.querySelector('.case__title');
       if (title) gsap.to(title, { fontStretch: '125%', ease: 'none', scrollTrigger: { trigger: '.case__hero', start: 'top top', end: 'bottom top', scrub: true } });
+      // Between two projects (home): the bearing tape slides 45° under its index, from the last stop to this one,
+      // scrubbed over the range in which the header needle makes the same turn (compass.ts, chart: 20% of the screen
+      // either side of the block's top edge). The tape rests on its end state in CSS, so this only adds the journey.
+      for (const leg of document.querySelectorAll<HTMLElement>('[data-leg]')) {
+        gsap.fromTo(leg.querySelector('.leg__tape'), { xPercent: (-9 / 33) * 100 }, {
+          xPercent: 0,
+          ease: 'none',
+          scrollTrigger: { trigger: leg.parentElement, start: 'top 70%', end: 'top 30%', scrub: true },
+        });
+      }
     });
   }
 

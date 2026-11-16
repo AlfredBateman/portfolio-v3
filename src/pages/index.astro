@@ -6,6 +6,9 @@ import Waypoint from '../components/Waypoint.astro';
 import ProjectFigure from '../components/ProjectFigure.astro';
 import { href, projects, site, testsLabel } from '../data/site';
 import { emWidth } from '../data/fit';
+
+// The stops of the home page's turn, by bearing: the four projects, then Contact on northeast.
+const stops: Record<number, string> = { 45: 'Contact', ...Object.fromEntries(projects.map((p, i) => [225 - i * 45, p.title])) };
 ---
 <Base current="home">
   {/* Everything in the hero is in the first paint. Only the dial performs (src/motion/compass.ts). */}
@@ -42,8 +45,9 @@ import { emWidth } from '../data/fit';
     </nav>
   </section>
 
-  {/* Each project is a stop on the turn to northeast: 225°, 180°, 135°, 090°, then Contact on 045°. All text is in
-      place from the first paint; the figure of the block at mid-screen runs (src/motion/figures.ts). */}
+  {/* Each project is a stop on the turn to northeast: 225°, 180°, 135°, 090°, then Contact on 045°. Every block reads
+      the same way: what it is, the problem, results with numbers, links; beside them the figure, the stack and my part.
+      All text is in place from the first paint; the figure of the block at mid-screen runs (src/motion/figures.ts). */}
   <section class="work" id="work" aria-labelledby="work-title">
     <div class="work__head">
       <h2 id="work-title">Work</h2>
@@ -53,45 +57,76 @@ import { emWidth } from '../data/fit';
       </p>
     </div>
     <ol class="blocks">
-      {projects.map((p, i) => (
-        <li>
-          <article class="block" id={p.slug} aria-labelledby={`${p.slug}-name`} data-waypoint data-stop={p.title}>
-            <div class="block__bar">
-              <Waypoint id={p.slug} deg={225 - i * 45} />
-              <p class="block__status">{p.status}</p>
-            </div>
-            <h3 class="block__title" id={`${p.slug}-name`}>
-              <a class="flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title} style={`--em:${emWidth(p.title)}`}>
-                <span>{p.title}</span> <Arrow />
-              </a>
-            </h3>
-            <div class="block__text">
-              <p class="block__summary">{p.summary}</p>
-              <dl class="block__facts">
-                <div><dt>My part</dt><dd>{p.role}</dd></div>
-                <div><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
-                {p.tests > 0 && (
-                  <div>
-                    <dt>Tests</dt>
-                    <dd>
-                      {p.tests.toLocaleString('en-US')}{p.ci ? ', run in ' : ', run locally'}
-                      {p.ci && <a class="link" href={p.ci} rel="noopener" target="_blank">CI ↗</a>}
-                    </dd>
+      {projects.map((p, i) => {
+        const deg = 225 - i * 45;
+        const [state, detail] = p.status.split(' · ');
+        return (
+          <li>
+            <article class="block" id={p.slug} aria-labelledby={`${p.slug}-name`} data-waypoint data-stop={p.title}>
+              {/* Between two projects: the course as a tape. It slides under the index from the last stop's bearing
+                  to this one's while the block crosses the middle of the screen (src/motion/setup.ts). */}
+              {i > 0 && (
+                <div class="leg" aria-hidden="true" data-leg>
+                  <div class="leg__origin">
+                    <div class="leg__tape">
+                      {[-1, 0, 1].map((m) => {
+                        const d = (deg + m * 45 + 360) % 360;
+                        return <span class:list={{ 'is-stop': stops[d] }} style={`--m:${m}`}>{String(d).padStart(3, '0')}° {stops[d]}</span>;
+                      })}
+                    </div>
+                    <i class="leg__index"></i>
                   </div>
-                )}
-                {p.now && <div><dt>Works today</dt><dd>{p.now}</dd></div>}
-                {p.next && <div><dt>Next</dt><dd>{p.next}</dd></div>}
-              </dl>
-              <p class="block__links">
-                <a class="cta flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>Case study <Arrow /></a>
-                <a class="cta flood" href={p.repo} rel="noopener" target="_blank" data-attract="GitHub">GitHub <Arrow /></a>
-                {p.live && <a class="cta flood" href={p.live} rel="noopener" target="_blank" data-attract="Live app">Live app <Arrow /></a>}
-              </p>
-            </div>
-            <div class="block__figure"><ProjectFigure slug={p.slug} /></div>
-          </article>
-        </li>
-      ))}
+                </div>
+              )}
+              <div class="block__bar">
+                <Waypoint id={p.slug} deg={deg} />
+                <p class="block__status"><span class:list={['tag', { 'tag--ink': p.now }]}>{state}</span> {detail}</p>
+              </div>
+              <h3 class="block__title" id={`${p.slug}-name`}>
+                <a class="flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title} style={`--em:${emWidth(p.title)}`}>
+                  <span>{p.title}</span> <Arrow />
+                </a>
+              </h3>
+              <div class="block__text">
+                <p class="block__summary">{p.summary}</p>
+                <div class="block__problem">
+                  <h4 class="label">The problem</h4>
+                  <p>{p.context}</p>
+                </div>
+                <div class="block__proof">
+                  <h4 class="label">Results</h4>
+                  <ul class="block__results">
+                    {p.details.filter((d) => /\d/.test(d.stat)).map((d) => (
+                      <li>
+                        <strong class="block__stat">{d.stat}</strong>
+                        <p><b>{d.label}.</b> {d.text}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p class="block__links">
+                  <a class="cta flood" href={href(`work/${p.slug}/`)} data-attract={p.title} data-dest={p.title}>Case study <Arrow /></a>
+                  <a class="cta flood" href={p.repo} rel="noopener" target="_blank" data-attract="GitHub">GitHub <Arrow /></a>
+                  {p.live && <a class="cta flood" href={p.live} rel="noopener" target="_blank" data-attract="Live app">Live app <Arrow /></a>}
+                  {p.ci && <a class="cta flood" href={p.ci} rel="noopener" target="_blank" data-attract="CI">Tests in CI <Arrow /></a>}
+                </p>
+              </div>
+              <div class="block__side">
+                <div class="block__figure"><ProjectFigure slug={p.slug} /></div>
+                <dl class="block__facts">
+                  <div>
+                    <dt>Stack</dt>
+                    <dd><ul class="tags">{p.stack.map((s) => <li class="tag">{s}</li>)}</ul></dd>
+                  </div>
+                  <div><dt>My part</dt><dd>{p.role}</dd></div>
+                  {p.now && <div><dt>Works today</dt><dd>{p.now}</dd></div>}
+                  {p.next && <div><dt>Next</dt><dd>{p.next}</dd></div>}
+                </dl>
+              </div>
+            </article>
+          </li>
+        );
+      })}
     </ol>
   </section>
 </Base>
