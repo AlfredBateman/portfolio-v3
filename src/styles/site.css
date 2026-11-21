@@ -388,6 +388,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
 .hero__true:disabled { cursor: default; }
 @media (pointer: coarse) and (max-width: 479px) {
   .hero__compass { width: clamp(5rem, calc(100svh - 39.5rem), 56vw); margin-bottom: 2rem; }
+  .hero__true::after { content: ""; position: absolute; inset: -0.25rem -0.5rem; }
 }
 .cta--quiet { border-color: var(--c-line); }
 /* The primary action is printed in ink; the flood turns it back to paper. */
@@ -544,6 +545,7 @@ html.is-scrolled .header { border-color: var(--c-line); }
   position: relative;
   z-index: var(--z-content);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 1fr auto auto auto;
   min-height: 92svh;
   padding: calc(var(--u) * 6) var(--gutter) calc(var(--u) * 2.5);
@@ -633,6 +635,8 @@ html.is-scrolled .header { border-color: var(--c-line); }
   .footer__mail { flex-basis: 100%; font-size: calc(86cqi / (var(--chars, 16) * 0.62)); }
   .footer__copy { margin-bottom: calc(var(--u) * 2); }
   .footer__links { grid-template-columns: minmax(0, 1fr); }
+  /* Rules on the gutter, in line with the address above. */
+  .footer__row { margin-inline: 0; padding-inline: 0; }
 }
 
 /* ---------- Case study ---------- */
@@ -731,6 +735,7 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
   .case__summary { grid-column: 1 / -1; grid-row: 2; padding: calc(var(--u) * 3) 0 calc(var(--u) * 5); }
   .case__figure { grid-column: 1 / -1; grid-row: 3; padding: 0; margin-bottom: calc(var(--u) * 5); }
   .pfig svg { width: 100%; max-height: none; }
+  .pfig figcaption, .shot figcaption { font-size: 0.875rem; line-height: 1.5; }
   .case__meta { grid-column: 1 / -1; grid-row: 4; padding: 1rem 0 0; border-top: 1px solid var(--c-fg); }
 }
 
@@ -827,7 +832,11 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
 
 @media (max-width: 767px) {
   .pair__text, .outcome__body { grid-column: 1 / -1; }
-  .pair__text, .outcome__text { font-size: 1.5rem; }
+  /* Long statements on a narrow column: smaller and looser, so a nine-line paragraph still reads as text. */
+  .pair__text, .outcome__text { font-size: 1.3125rem; line-height: 1.25; letter-spacing: -0.015em; }
+  .pair { padding-block: calc(var(--u) * 5); }
+  .outcome { padding-block: calc(var(--u) * 6) calc(var(--u) * 7); }
+  .figure { padding-bottom: calc(var(--u) * 6); }
 }
 
 /* In numbers: the project's real figures, set as data. */
@@ -951,6 +960,7 @@ g.is-hot > .pfig__strong { fill: var(--c-bg); }
   .arow__body { grid-column: 1 / -1; }
   .ruled--2 { grid-template-columns: minmax(0, 1fr); }
   .kit > div { grid-template-columns: minmax(0, 1fr); }
+  .rows { padding-bottom: calc(var(--u) * 4); }
 }
 
 /* ---------- 404 ---------- */
